@@ -1,307 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Grocery List App</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
     body {
-      background: linear-gradient(to bottom, #f5f7fa 0%, #c3cfe2 100%);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
+      font-family: Arial, sans-serif;
+      margin: 20px;
     }
-
-    .container {
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 1200px;
-      padding: 25px;
-      margin-top: 20px;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
     h1 {
-      color: #2c3e50;
-      font-weight: 600;
-      font-size: 2rem;
-      margin-bottom: 5px;
+      text-align: center;
     }
-
-    .input-section {
+    #input-area {
       display: flex;
       justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
-
-    #grocery-input {
-      flex: 1;
-      min-width: 250px;
-      max-width: 400px;
-      padding: 12px 15px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 18px;
+    #item-input {
+      width: 250px;
+      padding: 8px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px 0 0 4px;
     }
-
-    #add-btn {
-      background-color: #3498db;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 14px 25px;
+    #mic-btn {
+      background: #eee;
+      border: 1px solid #ccc;
+      border-left: none;
+      padding: 0 10px;
       cursor: pointer;
-      font-size: 18px;
-      font-weight: 600;
+      border-radius: 0 4px 4px 0;
     }
-
-    #add-btn:hover {
-      background-color: #2980b9;
+    #mic-btn:hover {
+      background: #ddd;
     }
-
-    .grocery-columns {
-      display: flex;
-      flex-wrap: wrap;
+    #categories {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
     }
-
-    .column {
-      background: white;
-      border-radius: 8px;
-      padding: 15px;
-      min-width: 250px;
-      flex: 1;
+    .category {
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+      background: #f9f9f9;
     }
-
-    .column-title {
-      font-weight: 700;
-      color: #2c3e50;
-      font-size: 1.2rem;
-      margin-bottom: 15px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid #eee;
+    .category h2 {
+      margin-top: 0;
+      font-size: 18px;
     }
-
-    .grocery-list {
-      list-style-type: none;
-    }
-
-    .grocery-item {
-      display: flex;
-      align-items: center;
-      padding: 10px 5px;
-      animation: fadeIn 0.3s;
-    }
-
-    .item-text {
-      flex: 1;
-      font-size: 16px;
-      margin-left: 12px;
-      margin-right: 12px;
-    }
-
-    .checked .item-text {
-      color: #7f8c8d;
-      text-decoration: line-through;
-    }
-
-    .check-btn {
-      background: none;
-      border: 2px solid #bdc3c7;
-      border-radius: 50%;
-      width: 22px;
-      height: 22px;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .checked .check-btn {
-      background-color: #27ae60;
-      border-color: #27ae60;
-    }
-
-    .check-mark {
-      color: white;
-      font-size: 12px;
-      display: none;
-    }
-
-    .checked .check-mark {
-      display: block;
-    }
-
-    .delete-btn {
-      background: none;
-      border: none;
-      color: #e74c3c;
-      font-size: 16px;
-      cursor: pointer;
-      padding: 5px;
-      opacity: 0.7;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .delete-btn:hover {
-      opacity: 1;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .empty-state {
-      text-align: center;
-      color: #95a5a6;
-      padding: 30px 0;
-      width: 100%;
-    }
-
-    .empty-state i {
-      font-size: 40px;
-      margin-bottom: 10px;
-      opacity: 0.7;
+    ul {
+      padding-left: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>🛒 Grocery List</h1>
-    </header>
-
-    <div class="input-section">
-      <input type="text" id="grocery-input" placeholder="Add an item (e.g. milk, apples, bread)" />
-      <button id="add-btn">Add v2frank</button>
-    </div>
-
-    <div class="grocery-columns" id="grocery-columns">
-      <div class="empty-state" id="empty-state">
-        <div class="icon" style="font-size: 2.5rem;">🛒</div>
-        <p>Your grocery list is empty</p>
-        <p>Add items to get started</p>
-      </div>
-    </div>
+  <h1>Grocery List</h1>
+  
+  <div id="input-area">
+    <input type="text" id="item-input" placeholder="Add grocery item..." />
+    <button id="mic-btn">🎤</button>
   </div>
 
+  <div id="categories"></div>
+
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const groceryInput = document.getElementById('grocery-input');
-      const addButton = document.getElementById('add-btn');
-      const groceryColumns = document.getElementById('grocery-columns');
-      const emptyState = document.getElementById('empty-state');
+    const categories = {
+      "Produce": ["Apples", "Bananas", "Carrots", "Broccoli", "Spinach"],
+      "Dairy": ["Milk", "Cheese", "Yogurt", "Butter"],
+      "Meat": ["Chicken", "Beef", "Pork", "Fish"],
+      "Pantry": ["Rice", "Pasta", "Cereal", "Flour", "Sugar"],
+      "Frozen": ["Ice Cream", "Frozen Pizza", "Peas", "French Fries"],
+      "Beverages": ["Coffee", "Tea", "Orange Juice", "Soda", "Water"],
+      "Household": ["Paper Towels", "Dish Soap", "Laundry Detergent", "Toilet Paper"],
+      "Other": []
+    };
 
-      // Create category column if not exists
-      function getOrCreateCategoryColumn() {
-        let categoryColumn = document.getElementById('Default-column');
-        if (!categoryColumn) {
-          categoryColumn = document.createElement('div');
-          categoryColumn.className = 'column';
-          categoryColumn.id = 'Default-column';
+    const categoryKeywords = {
+      "Produce": ["apple", "banana", "carrot", "broccoli", "spinach", "lettuce", "onion", "potato", "tomato"],
+      "Dairy": ["milk", "cheese", "yogurt", "butter", "cream", "eggs"],
+      "Meat": ["chicken", "beef", "pork", "fish", "steak", "turkey"],
+      "Pantry": ["rice", "pasta", "cereal", "flour", "sugar", "beans", "oil"],
+      "Frozen": ["ice cream", "frozen pizza", "peas", "fries", "berries"],
+      "Beverages": ["coffee", "tea", "juice", "soda", "water"],
+      "Household": ["paper towels", "soap", "detergent", "toilet paper", "cleaner"]
+    };
 
-          const columnTitle = document.createElement('div');
-          columnTitle.className = 'column-title';
-          columnTitle.textContent = 'Items';
+    const categoriesDiv = document.getElementById("categories");
+    const input = document.getElementById("item-input");
 
-          const groceryList = document.createElement('ul');
-          groceryList.className = 'grocery-list';
+    function renderCategories() {
+      categoriesDiv.innerHTML = "";
+      for (let category in categories) {
+        const catDiv = document.createElement("div");
+        catDiv.className = "category";
+        const h2 = document.createElement("h2");
+        h2.textContent = category;
+        catDiv.appendChild(h2);
 
-          categoryColumn.appendChild(columnTitle);
-          categoryColumn.appendChild(groceryList);
-          groceryColumns.appendChild(categoryColumn);
-        }
-        return categoryColumn.querySelector('.grocery-list');
-      }
-
-      function createGroceryItem(text) {
-        const listItem = document.createElement('li');
-        listItem.className = 'grocery-item';
-
-        const checkButton = document.createElement('button');
-        checkButton.className = 'check-btn';
-        const checkMark = document.createElement('span');
-        checkMark.className = 'check-mark';
-        checkMark.textContent = '✓';
-        checkButton.appendChild(checkMark);
-
-        const itemText = document.createElement('span');
-        itemText.className = 'item-text';
-        itemText.textContent = text;
-
-        const deleteButton = document.createElement('button');
-        deleteButton.className = 'delete-btn';
-        deleteButton.innerHTML = '✖';
-
-        checkButton.addEventListener('click', function () {
-          listItem.classList.toggle('checked');
+        const ul = document.createElement("ul");
+        categories[category].forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = item;
+          ul.appendChild(li);
         });
 
-        deleteButton.addEventListener('click', function () {
-          listItem.remove();
-          if (!document.querySelector('.grocery-item')) {
-            groceryColumns.innerHTML = '';
-            groceryColumns.appendChild(emptyState);
-          }
-        });
-
-        listItem.appendChild(checkButton);
-        listItem.appendChild(itemText);
-        listItem.appendChild(deleteButton);
-        return listItem;
+        catDiv.appendChild(ul);
+        categoriesDiv.appendChild(catDiv);
       }
+    }
 
-      function addGroceryItem() {
-        const value = groceryInput.value.trim();
-        if (value === '') {
-          alert('Please enter an item.');
-          return;
+    function addItem(item) {
+      item = item.trim();
+      if (!item) return;
+
+      let placed = false;
+      for (let cat in categoryKeywords) {
+        if (categoryKeywords[cat].some(keyword => item.toLowerCase().includes(keyword))) {
+          categories[cat].push(item);
+          placed = true;
+          break;
         }
-
-        if (emptyState) emptyState.remove();
-
-        const list = getOrCreateCategoryColumn();
-        const item = createGroceryItem(value);
-        list.appendChild(item);
-
-        groceryInput.value = '';
-        groceryInput.focus();
       }
+      if (!placed) {
+        categories["Other"].push(item);
+      }
+      renderCategories();
+    }
 
-      addButton.addEventListener('click', addGroceryItem);
-
-      groceryInput.addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-          addGroceryItem();
-        }
-      });
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") {
+        addItem(input.value);
+        input.value = "";
+      }
     });
+
+    // Microphone functionality
+    const micBtn = document.getElementById("mic-btn");
+    let recognition;
+    if ("webkitSpeechRecognition" in window) {
+      recognition = new webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = "en-US";
+
+      recognition.onresult = function (event) {
+        const transcript = event.results[0][0].transcript;
+        input.value = transcript;
+        addItem(transcript);
+        input.value = "";
+      };
+    } else {
+      micBtn.disabled = true;
+      micBtn.textContent = "❌";
+    }
+
+    micBtn.addEventListener("click", () => {
+      if (recognition) recognition.start();
+    });
+
+    renderCategories();
   </script>
 </body>
 </html>
