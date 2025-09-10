@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Grocery List V2</title>
+  <title>Grocery List V4</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -24,34 +24,32 @@
       margin-bottom: 20px;
     }
     #itemInput {
-      width: 65%;
-      padding: 8px;
+      width: 70%;
+      padding: 12px;
+      font-size: 16px;
       border: 1px solid #ddd;
       border-radius: 6px;
     }
     #addBtn {
-      padding: 9px 14px;
+      padding: 10px 16px;
       background: #28a745;
       color: white;
       border: none;
       border-radius: 6px;
       cursor: pointer;
       margin-left: 5px;
+      font-size: 16px;
     }
     #addBtn:hover {
       background: #218838;
     }
     #micBtn {
-      background: #007bff;
-      color: white;
+      background: none;
       border: none;
-      padding: 9px 14px;
-      border-radius: 6px;
+      font-size: 22px;
       cursor: pointer;
       margin-left: 5px;
-    }
-    #micBtn:hover {
-      background: #0069d9;
+      vertical-align: middle;
     }
     table {
       width: 100%;
@@ -88,10 +86,16 @@
       cursor: pointer;
       transition: background 0.3s;
       font-weight: bold;
+      position: relative;
     }
-    li.checked {
-      text-decoration: line-through;
-      color: #aaa;
+    .checkedMark {
+      color: green;
+      font-weight: bold;
+      margin-right: 5px;
+      display: none;
+    }
+    li.checked .checkedMark {
+      display: inline;
     }
     .deleteBtn {
       font-size: 14px;
@@ -108,7 +112,7 @@
 </head>
 <body>
   <div class="container">
-    <h2>Grocery List V2</h2>
+    <h2>Grocery List V4</h2>
     <input type="text" id="itemInput" placeholder="Add grocery item...">
     <button id="addBtn">Add</button>
     <button id="micBtn">🎤</button>
@@ -122,12 +126,12 @@
     let categoriesTableRow = document.getElementById("categoriesTable").querySelector("tr");
 
     const categories = {
-      "Fruits": ["apple", "banana", "orange", "grapes", "mango", "pear"],
-      "Vegetables": ["carrot", "broccoli", "spinach", "onion", "potato", "lettuce"],
-      "Dairy": ["milk", "cheese", "yogurt", "butter", "cream"],
-      "Meat": ["chicken", "beef", "pork", "turkey", "lamb"],
-      "Bakery": ["bread", "bagel", "croissant", "donut"],
-      "Beverages": ["juice", "soda", "coffee", "tea", "water"]
+      "Fruits": ["Apple","Apricot","Avocado","Banana","Blackberry","Blueberry","Cherry","Coconut","Cranberry","Date","Dragonfruit","Fig","Grape","Grapefruit","Kiwi","Lemon","Lime","Mango","Melon","Nectarine","Orange","Papaya","Peach","Pear","Pineapple","Plum","Pomegranate","Raspberry","Strawberry","Watermelon"],
+      "Vegetables": ["Artichoke","Asparagus","Beet","Bell Pepper","Broccoli","Brussels Sprouts","Cabbage","Carrot","Cauliflower","Celery","Corn","Cucumber","Eggplant","Garlic","Kale","Leek","Lettuce","Mushroom","Onion","Parsnip","Pea","Potato","Pumpkin","Radish","Spinach","Squash","Sweet Potato","Tomato","Turnip","Zucchini"],
+      "Dairy": ["Butter","Cheese","Cream","Milk","Yogurt"],
+      "Meat": ["Bacon","Beef","Chicken","Duck","Lamb","Pork","Sausage","Turkey"],
+      "Bakery": ["Bagel","Bread","Brioche","Croissant","Donut","Muffin","Sourdough"],
+      "Beverages": ["Coffee","Juice","Soda","Tea","Water","Wine","Beer"]
     };
 
     const shownCategories = {};
@@ -139,7 +143,7 @@
     function getCategory(item) {
       const lower = item.toLowerCase();
       for (const [category, items] of Object.entries(categories)) {
-        if (items.includes(lower)) return category;
+        if (items.map(i=>i.toLowerCase()).includes(lower)) return category;
       }
       return "Other";
     }
@@ -149,7 +153,6 @@
       if (!value) return;
 
       value = capitalizeFirst(value);
-
       const category = getCategory(value);
 
       // Create category cell if not shown
@@ -179,7 +182,14 @@
       const ul = shownCategories[category];
 
       const li = document.createElement("li");
-      li.textContent = value;
+
+      const checkMark = document.createElement("span");
+      checkMark.className = "checkedMark";
+      checkMark.textContent = "✔";
+      li.appendChild(checkMark);
+
+      const textNode = document.createTextNode(value);
+      li.appendChild(textNode);
 
       li.addEventListener("click", function(e) {
         if (e.target.tagName !== "BUTTON") {
@@ -201,6 +211,11 @@
       li.appendChild(delBtn);
       ul.appendChild(li);
 
+      // Sort alphabetically
+      const sortedLis = Array.from(ul.children).sort((a,b)=>a.textContent.localeCompare(b.textContent));
+      ul.innerHTML = "";
+      sortedLis.forEach(l => ul.appendChild(l));
+
       input.value = "";
     }
 
@@ -209,13 +224,14 @@
       if (e.key === "Enter") addItem();
     });
 
-    // Speech recognition
+    // Microphone with proper API
     micBtn.addEventListener("click", () => {
-      if (!('webkitSpeechRecognition' in window)) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
         alert('Speech recognition not supported in this browser.');
         return;
       }
-      const recognition = new webkitSpeechRecognition();
+      const recognition = new SpeechRecognition();
       recognition.lang = 'en-US';
       recognition.interimResults = false;
       recognition.maxAlternatives = 1;
@@ -227,6 +243,7 @@
         input.value = speechResult;
         addItem();
       };
+
       recognition.onerror = function(event) {
         console.error(event.error);
       };
