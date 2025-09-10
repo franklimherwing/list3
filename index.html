@@ -2,164 +2,179 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Grocery List App</title>
+  <title>Smart Grocery Checklist</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 20px;
-    }
-    h1 {
-      text-align: center;
-    }
-    #input-area {
+      background: #f4f4f4;
       display: flex;
       justify-content: center;
+      padding: 40px;
+    }
+    .container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      width: 450px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
       margin-bottom: 20px;
     }
-    #item-input {
-      width: 250px;
+    #itemInput {
+      width: 70%;
       padding: 8px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 4px 0 0 4px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
     }
-    #mic-btn {
-      background: #eee;
-      border: 1px solid #ccc;
-      border-left: none;
-      padding: 0 10px;
+    #addBtn {
+      padding: 9px 14px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
       cursor: pointer;
-      border-radius: 0 4px 4px 0;
+      margin-left: 5px;
     }
-    #mic-btn:hover {
-      background: #ddd;
-    }
-    #categories {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
+    #addBtn:hover {
+      background: #218838;
     }
     .category {
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      padding: 10px;
-      background: #f9f9f9;
+      margin-top: 20px;
     }
-    .category h2 {
-      margin-top: 0;
-      font-size: 18px;
+    .category h3 {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 4px;
+      font-size: 1.1em;
+      color: #333;
     }
     ul {
-      padding-left: 20px;
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+    li {
+      background: #fafafa;
+      padding: 10px;
+      margin: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    li.checked {
+      text-decoration: line-through;
+      color: #aaa;
+    }
+    .deleteBtn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+    .deleteBtn:hover {
+      background: #c82333;
     }
   </style>
 </head>
 <body>
-  <h1>Grocery List</h1>
-  
-  <div id="input-area">
-    <input type="text" id="item-input" placeholder="Add grocery item..." />
-    <button id="mic-btn">🎤</button>
+  <div class="container">
+    <h2>Smart Grocery Checklist</h2>
+    <input type="text" id="itemInput" placeholder="Add grocery item...">
+    <button id="addBtn">Add</button>
+    <div id="categories"></div>
   </div>
 
-  <div id="categories"></div>
-
   <script>
-    const categories = {
-      "Produce": ["Apples", "Bananas", "Carrots", "Broccoli", "Spinach"],
-      "Dairy": ["Milk", "Cheese", "Yogurt", "Butter"],
-      "Meat": ["Chicken", "Beef", "Pork", "Fish"],
-      "Pantry": ["Rice", "Pasta", "Cereal", "Flour", "Sugar"],
-      "Frozen": ["Ice Cream", "Frozen Pizza", "Peas", "French Fries"],
-      "Beverages": ["Coffee", "Tea", "Orange Juice", "Soda", "Water"],
-      "Household": ["Paper Towels", "Dish Soap", "Laundry Detergent", "Toilet Paper"],
-      "Other": []
-    };
-
-    const categoryKeywords = {
-      "Produce": ["apple", "banana", "carrot", "broccoli", "spinach", "lettuce", "onion", "potato", "tomato"],
-      "Dairy": ["milk", "cheese", "yogurt", "butter", "cream", "eggs"],
-      "Meat": ["chicken", "beef", "pork", "fish", "steak", "turkey"],
-      "Pantry": ["rice", "pasta", "cereal", "flour", "sugar", "beans", "oil"],
-      "Frozen": ["ice cream", "frozen pizza", "peas", "fries", "berries"],
-      "Beverages": ["coffee", "tea", "juice", "soda", "water"],
-      "Household": ["paper towels", "soap", "detergent", "toilet paper", "cleaner"]
-    };
-
+    const input = document.getElementById("itemInput");
+    const addBtn = document.getElementById("addBtn");
     const categoriesDiv = document.getElementById("categories");
-    const input = document.getElementById("item-input");
 
-    function renderCategories() {
-      categoriesDiv.innerHTML = "";
-      for (let category in categories) {
-        const catDiv = document.createElement("div");
-        catDiv.className = "category";
-        const h2 = document.createElement("h2");
-        h2.textContent = category;
-        catDiv.appendChild(h2);
+    // Define categories and sample items
+    const categories = {
+      "Fruits": ["apple", "banana", "orange", "grapes", "mango", "pear"],
+      "Vegetables": ["carrot", "broccoli", "spinach", "onion", "potato", "lettuce"],
+      "Dairy": ["milk", "cheese", "yogurt", "butter", "cream"],
+      "Meat": ["chicken", "beef", "pork", "turkey", "lamb"],
+      "Bakery": ["bread", "bagel", "croissant", "donut"],
+      "Beverages": ["juice", "soda", "coffee", "tea", "water"]
+    };
+
+    // Track which categories are shown
+    const shownCategories = {};
+
+    addBtn.addEventListener("click", addItem);
+    input.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") addItem();
+    });
+
+    function getCategory(item) {
+      const lower = item.toLowerCase();
+      for (const [category, items] of Object.entries(categories)) {
+        if (items.includes(lower)) return category;
+      }
+      return "Other";
+    }
+
+    function addItem() {
+      const value = input.value.trim();
+      if (value === "") return;
+
+      const category = getCategory(value);
+
+      // Create category section if not shown yet
+      if (!shownCategories[category]) {
+        const section = document.createElement("div");
+        section.className = "category";
+        section.id = "cat-" + category;
+
+        const title = document.createElement("h3");
+        title.textContent = category;
 
         const ul = document.createElement("ul");
-        categories[category].forEach(item => {
-          const li = document.createElement("li");
-          li.textContent = item;
-          ul.appendChild(li);
-        });
 
-        catDiv.appendChild(ul);
-        categoriesDiv.appendChild(catDiv);
+        section.appendChild(title);
+        section.appendChild(ul);
+        categoriesDiv.appendChild(section);
+
+        shownCategories[category] = ul;
       }
-    }
 
-    function addItem(item) {
-      item = item.trim();
-      if (!item) return;
+      const ul = shownCategories[category];
 
-      let placed = false;
-      for (let cat in categoryKeywords) {
-        if (categoryKeywords[cat].some(keyword => item.toLowerCase().includes(keyword))) {
-          categories[cat].push(item);
-          placed = true;
-          break;
+      const li = document.createElement("li");
+      li.textContent = value;
+
+      li.addEventListener("click", function(e) {
+        if (e.target.tagName !== "BUTTON") {
+          li.classList.toggle("checked");
         }
-      }
-      if (!placed) {
-        categories["Other"].push(item);
-      }
-      renderCategories();
-    }
+      });
 
-    input.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") {
-        addItem(input.value);
-        input.value = "";
-      }
-    });
-
-    // Microphone functionality
-    const micBtn = document.getElementById("mic-btn");
-    let recognition;
-    if ("webkitSpeechRecognition" in window) {
-      recognition = new webkitSpeechRecognition();
-      recognition.continuous = false;
-      recognition.interimResults = false;
-      recognition.lang = "en-US";
-
-      recognition.onresult = function (event) {
-        const transcript = event.results[0][0].transcript;
-        input.value = transcript;
-        addItem(transcript);
-        input.value = "";
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "❌";
+      delBtn.className = "deleteBtn";
+      delBtn.onclick = function() {
+        li.remove();
+        if (ul.children.length === 0) {
+          document.getElementById("cat-" + category).remove();
+          delete shownCategories[category];
+        }
       };
-    } else {
-      micBtn.disabled = true;
-      micBtn.textContent = "❌";
+
+      li.appendChild(delBtn);
+      ul.appendChild(li);
+
+      input.value = "";
     }
-
-    micBtn.addEventListener("click", () => {
-      if (recognition) recognition.start();
-    });
-
-    renderCategories();
   </script>
 </body>
 </html>
