@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Smart Grocery Checklist</title>
+  <title>Grocery List V2</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -24,7 +24,7 @@
       margin-bottom: 20px;
     }
     #itemInput {
-      width: 70%;
+      width: 65%;
       padding: 8px;
       border: 1px solid #ddd;
       border-radius: 6px;
@@ -40,6 +40,18 @@
     }
     #addBtn:hover {
       background: #218838;
+    }
+    #micBtn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 9px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+    #micBtn:hover {
+      background: #0069d9;
     }
     table {
       width: 100%;
@@ -82,31 +94,32 @@
       color: #aaa;
     }
     .deleteBtn {
-      background: #dc3545;
-      color: white;
+      font-size: 14px;
+      color: red;
       border: none;
-      padding: 3px 8px;
-      border-radius: 6px;
+      background: none;
       cursor: pointer;
-      margin-left: 10px;
+      margin-left: 5px;
     }
     .deleteBtn:hover {
-      background: #c82333;
+      color: darkred;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>Smart Grocery Checklist</h2>
+    <h2>Grocery List V2</h2>
     <input type="text" id="itemInput" placeholder="Add grocery item...">
     <button id="addBtn">Add</button>
+    <button id="micBtn">🎤</button>
     <table id="categoriesTable"><tr></tr></table>
   </div>
 
   <script>
     const input = document.getElementById("itemInput");
     const addBtn = document.getElementById("addBtn");
-    const categoriesTable = document.getElementById("categoriesTable").querySelector("tr");
+    const micBtn = document.getElementById("micBtn");
+    let categoriesTableRow = document.getElementById("categoriesTable").querySelector("tr");
 
     const categories = {
       "Fruits": ["apple", "banana", "orange", "grapes", "mango", "pear"],
@@ -119,10 +132,9 @@
 
     const shownCategories = {};
 
-    addBtn.addEventListener("click", addItem);
-    input.addEventListener("keypress", function(e) {
-      if (e.key === "Enter") addItem();
-    });
+    function capitalizeFirst(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+    }
 
     function getCategory(item) {
       const lower = item.toLowerCase();
@@ -134,19 +146,18 @@
 
     function addItem() {
       let value = input.value.trim();
-      if (value === "") return;
+      if (!value) return;
 
-      value = value.toUpperCase(); // force uppercase
+      value = capitalizeFirst(value);
 
       const category = getCategory(value);
 
       // Create category cell if not shown
       if (!shownCategories[category]) {
-        if (categoriesTable.children.length >= 4) {
-          // start new row if 4 categories filled
+        if (categoriesTableRow.children.length >= 4) {
           const newRow = document.createElement("tr");
-          categoriesTable.parentElement.appendChild(newRow);
-          categoriesTable = newRow;
+          document.getElementById("categoriesTable").appendChild(newRow);
+          categoriesTableRow = newRow;
         }
 
         const td = document.createElement("td");
@@ -160,7 +171,7 @@
 
         td.appendChild(title);
         td.appendChild(ul);
-        categoriesTable.appendChild(td);
+        categoriesTableRow.appendChild(td);
 
         shownCategories[category] = ul;
       }
@@ -177,7 +188,7 @@
       });
 
       const delBtn = document.createElement("button");
-      delBtn.textContent = "❌";
+      delBtn.textContent = "x";
       delBtn.className = "deleteBtn";
       delBtn.onclick = function() {
         li.remove();
@@ -192,6 +203,34 @@
 
       input.value = "";
     }
+
+    addBtn.addEventListener("click", addItem);
+    input.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") addItem();
+    });
+
+    // Speech recognition
+    micBtn.addEventListener("click", () => {
+      if (!('webkitSpeechRecognition' in window)) {
+        alert('Speech recognition not supported in this browser.');
+        return;
+      }
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.start();
+
+      recognition.onresult = function(event) {
+        const speechResult = event.results[0][0].transcript;
+        input.value = speechResult;
+        addItem();
+      };
+      recognition.onerror = function(event) {
+        console.error(event.error);
+      };
+    });
   </script>
 </body>
 </html>
