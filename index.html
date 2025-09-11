@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Grocery List V15</title>
+  <title>Grocery List V16</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * {
       box-sizing: border-box;
@@ -11,10 +12,10 @@
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
       display: flex;
       justify-content: center;
-      padding: 20px;
-      margin: 0;
     }
 
     .container {
@@ -28,8 +29,8 @@
 
     h1 {
       text-align: center;
-      font-size: 2rem;
-      margin-bottom: 25px;
+      font-size: 2.2em;
+      margin-bottom: 20px;
     }
 
     .input-container {
@@ -37,13 +38,13 @@
       flex-wrap: wrap;
       justify-content: center;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
     #itemInput {
       flex: 1;
       min-width: 200px;
-      padding: 16px;
+      padding: 14px;
       font-size: 18px;
       border: 1px solid #ddd;
       border-radius: 6px;
@@ -51,10 +52,10 @@
     }
 
     #addBtn, #micBtn {
-      padding: 16px 20px;
+      padding: 14px 20px;
+      font-size: 16px;
       border: none;
       border-radius: 6px;
-      font-size: 18px;
       cursor: pointer;
       color: white;
     }
@@ -68,33 +69,26 @@
     .stats {
       text-align: right;
       font-size: 14px;
-      color: #333;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
 
-    .categories {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 20px;
     }
 
-    .category {
-      flex: 1 1 250px;
-      max-width: 100%;
-      background: #f9f9f9;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 10px;
+    td {
+      vertical-align: top;
+      width: 25%;
     }
 
     .category h3 {
-      margin-bottom: 10px;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 4px;
-      font-size: 1.1em;
-      color: #333;
       text-align: center;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
     }
 
     ul {
@@ -139,24 +133,20 @@
       border: none;
       background: none;
       cursor: pointer;
-      margin-left: 6px;
     }
 
     .deleteBtn:hover {
       color: darkred;
     }
 
-    @media (max-width: 600px) {
-      .input-container {
-        flex-direction: column;
-        align-items: stretch;
+    @media (max-width: 768px) {
+      td {
+        width: 50%;
       }
+    }
 
-      #itemInput {
-        width: 100%;
-      }
-
-      #addBtn, #micBtn {
+    @media (max-width: 480px) {
+      td {
         width: 100%;
       }
 
@@ -167,23 +157,34 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Grocery List V15</h1>
-    <div class="input-container">
-      <input type="text" id="itemInput" placeholder="Add grocery item...">
-      <button id="addBtn">Add</button>
-      <button id="micBtn">🎤</button>
-    </div>
-    <div class="stats">
-      <div>Total Items: <span id="totalItems">0</span></div>
-      <div>Picked: <span id="pickedItems">0</span> / <span id="totalItems2">0</span></div>
-      <div><span id="completionPercent">0%</span></div>
-    </div>
-    <div class="categories" id="categoriesContainer"></div>
+<div class="container">
+  <h1>Grocery List V15</h1>
+  <div class="input-container">
+    <input type="text" id="itemInput" placeholder="Add grocery item...">
+    <button id="addBtn">Add</button>
+    <button id="micBtn">🎤</button>
   </div>
+  <div class="stats">
+    <div>Total Items: <span id="totalItems">0</span></div>
+    <div>Picked: <span id="pickedItems">0</span> / <span id="totalItems2">0</span></div>
+    <div><span id="completionPercent">0%</span></div>
+  </div>
+  <table id="categoriesTable"><tr></tr></table>
+</div>
 
 <script>
-// JS code remains mostly unchanged, except for replacing the table with flex-based divs
+const sampleItems = {
+  "Fruits & Vegetables": [...],
+  "Meat & Seafood": [...],
+  "Dairy & Eggs": [...],
+  "Bakery & Bread": [...],
+  "Pantry Staples": [...],
+  "Snacks & Sweets": [...],
+  "Beverages": [...],
+  "Frozen Foods": [...],
+  "Household & Other Essentials": [...]
+};
+
 const input = document.getElementById("itemInput");
 const addBtn = document.getElementById("addBtn");
 const micBtn = document.getElementById("micBtn");
@@ -192,7 +193,8 @@ const totalItems2Elem = document.getElementById("totalItems2");
 const pickedItemsElem = document.getElementById("pickedItems");
 const completionElem = document.getElementById("completionPercent");
 
-let categoriesContainer = document.getElementById("categoriesContainer");
+let categoriesTable = document.getElementById("categoriesTable");
+let categoriesTableRow = categoriesTable.querySelector("tr");
 let totalItems = 0;
 let pickedItems = 0;
 const shownCategories = {};
@@ -211,18 +213,22 @@ function getCategory(item) {
 
 function createCategoryCell(category) {
   if (!shownCategories[category]) {
-    const div = document.createElement("div");
-    div.className = "category";
-    div.id = "cat-" + category;
+    const td = document.createElement("td");
+    td.className = "category";
+    td.id = "cat-" + category;
 
     const title = document.createElement("h3");
     title.textContent = category;
 
     const ul = document.createElement("ul");
-    div.appendChild(title);
-    div.appendChild(ul);
+    td.appendChild(title);
+    td.appendChild(ul);
 
-    categoriesContainer.appendChild(div);
+    if (!categoriesTableRow || categoriesTableRow.children.length >= 4) {
+      categoriesTableRow = document.createElement("tr");
+      categoriesTable.appendChild(categoriesTableRow);
+    }
+    categoriesTableRow.appendChild(td);
     shownCategories[category] = ul;
   }
 }
@@ -249,7 +255,6 @@ function addItem() {
   checkMark.className = "checkedMark";
   checkMark.textContent = "✔";
   li.appendChild(checkMark);
-
   li.appendChild(document.createTextNode(value));
 
   li.addEventListener("click", function(e) {
@@ -303,8 +308,6 @@ micBtn.addEventListener("click", () => {
   };
   recognition.onerror = function(event){ console.error(event.error); };
 });
-
-const sampleItems = {/* (unchanged object from your original code) */};
 </script>
 </body>
 </html>
