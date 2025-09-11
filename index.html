@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Grocery List V7</title>
+  <title>Grocery List V8</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -17,16 +17,17 @@
       border-radius: 12px;
       width: 95%;
       max-width: 1000px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       position: relative;
     }
-    h2 {
+    h1 {
       text-align: center;
+      font-size: 32px;
       margin-bottom: 20px;
     }
     #itemInput {
       width: 80%;
-      padding: 14px;
+      padding: 16px;
       font-size: 18px;
       border: 1px solid #ddd;
       border-radius: 6px;
@@ -60,6 +61,7 @@
       text-align: right;
       font-size: 14px;
       color: #333;
+      line-height: 1.4;
     }
     table {
       width: 100%;
@@ -121,7 +123,7 @@
 </head>
 <body>
   <div class="container">
-    <h2>Grocery List V7</h2>
+    <h1>Grocery List V8</h1>
     <div style="display:flex; align-items:center; margin-bottom:10px;">
       <input type="text" id="itemInput" placeholder="Add grocery item...">
       <button id="addBtn">Add</button>
@@ -130,7 +132,7 @@
     <div class="stats">
       <div>Total Items: <span id="totalItems">0</span></div>
       <div>Picked: <span id="pickedItems">0</span> / <span id="totalItems2">0</span></div>
-      <div>Completion: <span id="completionPercent">0%</span> Complete</div>
+      <div><span id="completionPercent">0%</span></div>
     </div>
     <table id="categoriesTable"><tr></tr></table>
   </div>
@@ -149,7 +151,6 @@
     let totalItems = 0;
     let pickedItems = 0;
 
-    // Expanded sample items for validation
     const sampleItems = {
       "Fruits": ["Apple","Apricot","Avocado","Banana","Blackberry","Blueberry","Cherry","Coconut","Cranberry","Date","Dragonfruit","Fig","Grape","Grapefruit","Kiwi","Lemon","Lime","Mango","Melon","Nectarine","Orange","Papaya","Peach","Pear","Pineapple","Plum","Pomegranate","Raspberry","Strawberry","Watermelon","Passionfruit","Starfruit","Tangerine","Guava","Lychee","Mulberry","Persimmon"],
       "Vegetables": ["Artichoke","Asparagus","Beet","Bell Pepper","Broccoli","Brussels Sprouts","Cabbage","Carrot","Cauliflower","Celery","Corn","Cucumber","Eggplant","Garlic","Kale","Leek","Lettuce","Mushroom","Onion","Parsnip","Pea","Potato","Pumpkin","Radish","Spinach","Squash","Sweet Potato","Tomato","Turnip","Zucchini","Okra","Rutabaga","Chayote","Fennel","Bok Choy","Collard Greens","Endive"],
@@ -176,8 +177,8 @@
     function createCategoryCell(category) {
       if (!shownCategories[category]) {
         if (category === "Other") {
-          const newRow = categoriesTable.querySelectorAll("tr");
-          categoriesTableRow = newRow[newRow.length-1] || categoriesTableRow;
+          const rows = categoriesTable.querySelectorAll("tr");
+          categoriesTableRow = rows[rows.length-1] || categoriesTableRow;
         } else if (categoriesTableRow.children.length >= 4) {
           const newRow = document.createElement("tr");
           categoriesTable.appendChild(newRow);
@@ -226,76 +227,4 @@
 
       const li = document.createElement("li");
 
-      const checkMark = document.createElement("span");
-      checkMark.className = "checkedMark";
-      checkMark.textContent = "✔";
-      li.appendChild(checkMark);
-
-      const textNode = document.createTextNode(value);
-      li.appendChild(textNode);
-
-      li.addEventListener("click", function(e) {
-        if (e.target.tagName !== "BUTTON") {
-          li.classList.toggle("checked");
-          pickedItems += li.classList.contains("checked") ? 1 : -1;
-          updateStats();
-        }
-      });
-
-      const delBtn = document.createElement("button");
-      delBtn.textContent = "x";
-      delBtn.className = "deleteBtn";
-      delBtn.onclick = function() {
-        if (li.classList.contains("checked")) pickedItems--;
-        li.remove();
-        totalItems--;
-        updateStats();
-        if (ul.children.length === 0) {
-          document.getElementById("cat-" + category).remove();
-          delete shownCategories[category];
-        }
-      };
-
-      li.appendChild(delBtn);
-      ul.appendChild(li);
-
-      const sortedLis = Array.from(ul.children).sort((a,b) => a.textContent.localeCompare(b.textContent));
-      ul.innerHTML = "";
-      sortedLis.forEach(l => ul.appendChild(l));
-
-      totalItems++;
-      updateStats();
-      input.value = "";
-    }
-
-    addBtn.addEventListener("click", addItem);
-    input.addEventListener("keypress", function(e) {
-      if (e.key === "Enter") addItem();
-    });
-
-    micBtn.addEventListener("click", () => {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert('Speech recognition not supported in this browser.');
-        return;
-      }
-      const recognition = new SpeechRecognition();
-      recognition.lang = 'en-US';
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-
-      recognition.start();
-
-      recognition.onresult = function(event) {
-        const speechResult = event.results[0][0].transcript;
-        input.value = speechResult;
-        addItem();
-      };
-
-      recognition.onerror = function(event) {
-        console.error(event.error);
-      };
-    });
-  </script>
-</body>
-</html>
+      const checkMark = document.createEl
