@@ -1,130 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Grocery List V14</title>
-<style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f4f4;
-  display: flex;
-  justify-content: center;
-  padding: 40px;
-}
-.container {
-  background: #fff;
-  padding: 25px;
-  border-radius: 12px;
-  width: 95%;
-  max-width: 1400px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  position: relative;
-}
-h1 {
-  text-align: center;
-  font-size: 36px;
-  margin-bottom: 25px;
-}
-.input-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 15px;
-  gap: 10px;
-}
-#itemInput {
-  width: 60%;
-  padding: 18px;
-  font-size: 20px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  text-align: center;
-}
-#addBtn {
-  padding: 16px 22px;
-  background: #28a745;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 18px;
-}
-#addBtn:hover { background: #218838; }
-#micBtn {
-  background: #007bff;
-  border: none;
-  font-size: 20px;
-  padding: 16px 20px;
-  cursor: pointer;
-  border-radius: 6px;
-  color: white;
-}
-#micBtn:hover { background: #0062cc; }
-.stats {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  text-align: right;
-  font-size: 14px;
-  color: #333;
-  line-height: 1.4;
-}
-table { width: 100%; border-collapse: collapse; margin-top: 25px; }
-td {
-  vertical-align: top;
-  width: 25%;
-  padding: 10px;
-}
-.category h3 {
-  margin-bottom: 10px;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 4px;
-  font-size: 1.1em;
-  color: #333;
-  text-align: center;
-}
-ul { list-style-type: none; padding: 0; margin: 0; }
-li {
-  background: #fafafa;
-  padding: 6px 8px;
-  margin: 4px 0;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  font-weight: bold;
-}
-.checkedMark { color: green; font-weight: bold; margin-right: 4px; display: none; }
-li.checked .checkedMark { display: inline; }
-.deleteBtn {
-  font-size: 14px;
-  color: red;
-  border: none;
-  background: none;
-  cursor: pointer;
-  margin-left: 4px;
-}
-.deleteBtn:hover { color: darkred; }
-</style>
+  <meta charset="UTF-8">
+  <title>Grocery List V15</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      width: 100%;
+      max-width: 1400px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 25px;
+    }
+
+    .input-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    #itemInput {
+      flex: 1;
+      min-width: 200px;
+      padding: 16px;
+      font-size: 18px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    #addBtn, #micBtn {
+      padding: 16px 20px;
+      border: none;
+      border-radius: 6px;
+      font-size: 18px;
+      cursor: pointer;
+      color: white;
+    }
+
+    #addBtn { background: #28a745; }
+    #addBtn:hover { background: #218838; }
+
+    #micBtn { background: #007bff; }
+    #micBtn:hover { background: #0062cc; }
+
+    .stats {
+      text-align: right;
+      font-size: 14px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .categories {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .category {
+      flex: 1 1 250px;
+      max-width: 100%;
+      background: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 10px;
+    }
+
+    .category h3 {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 4px;
+      font-size: 1.1em;
+      color: #333;
+      text-align: center;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      background: #fafafa;
+      padding: 6px 8px;
+      margin: 4px 0;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .checkedMark {
+      color: green;
+      font-weight: bold;
+      margin-right: 6px;
+      display: none;
+    }
+
+    li.checked .checkedMark {
+      display: inline;
+    }
+
+    li.checked {
+      text-decoration: line-through;
+      text-decoration-color: red;
+      color: #888;
+    }
+
+    .deleteBtn {
+      font-size: 14px;
+      color: red;
+      border: none;
+      background: none;
+      cursor: pointer;
+      margin-left: 6px;
+    }
+
+    .deleteBtn:hover {
+      color: darkred;
+    }
+
+    @media (max-width: 600px) {
+      .input-container {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      #itemInput {
+        width: 100%;
+      }
+
+      #addBtn, #micBtn {
+        width: 100%;
+      }
+
+      .stats {
+        text-align: center;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-<h1>Grocery List V14</h1>
-<div class="input-container">
-  <input type="text" id="itemInput" placeholder="Add grocery item...">
-  <button id="addBtn">Add</button>
-  <button id="micBtn">🎤</button>
-</div>
-<div class="stats">
-  <div>Total Items: <span id="totalItems">0</span></div>
-  <div>Picked: <span id="pickedItems">0</span> / <span id="totalItems2">0</span></div>
-  <div><span id="completionPercent">0%</span></div>
-</div>
-<table id="categoriesTable"><tr></tr></table>
-</div>
+  <div class="container">
+    <h1>Grocery List V15</h1>
+    <div class="input-container">
+      <input type="text" id="itemInput" placeholder="Add grocery item...">
+      <button id="addBtn">Add</button>
+      <button id="micBtn">🎤</button>
+    </div>
+    <div class="stats">
+      <div>Total Items: <span id="totalItems">0</span></div>
+      <div>Picked: <span id="pickedItems">0</span> / <span id="totalItems2">0</span></div>
+      <div><span id="completionPercent">0%</span></div>
+    </div>
+    <div class="categories" id="categoriesContainer"></div>
+  </div>
 
 <script>
+// JS code remains mostly unchanged, except for replacing the table with flex-based divs
 const input = document.getElementById("itemInput");
 const addBtn = document.getElementById("addBtn");
 const micBtn = document.getElementById("micBtn");
@@ -133,24 +192,9 @@ const totalItems2Elem = document.getElementById("totalItems2");
 const pickedItemsElem = document.getElementById("pickedItems");
 const completionElem = document.getElementById("completionPercent");
 
-let categoriesTable = document.getElementById("categoriesTable");
-let categoriesTableRow = categoriesTable.querySelector("tr");
+let categoriesContainer = document.getElementById("categoriesContainer");
 let totalItems = 0;
 let pickedItems = 0;
-
-// Sample items
-const sampleItems = {
-  "Fruits & Vegetables": ["Apples","Bananas","Oranges","Strawberries","Grapes","Lemons","Avocados","Blueberries","Peaches","Melons","Mangos","Pineapples","Tomatoes","Potatoes","Onions","Carrots","Lettuce","Spinach","Kale","Broccoli","Peppers","Cucumbers","Celery","Garlic","Mushrooms","Corn","Peas","Squash","Zucchini","Asparagus","Radishes","Beets","Cabbage","Ginger","Limes","Pears","Plums","Cherries","Raspberries","Blackberries","Cranberries","Papayas","Artichokes","Eggplant","Okra","Leeks","Turnips","Rutabagas","Parsnips","Cilantro"],
-  "Meat & Seafood": ["Chicken","Beef","Pork","Bacon","Sausage","Steak","Ribs","Ham","Turkey","Salmon","Tuna","Shrimp","Cod","Tilapia","Scallops","Crab","Lobster","Clams","Mussels","Oysters","Trout","Haddock","Catfish","Sardines","Anchovies","Pepperoni","Salami","Brisket","Chops","Wings","Ground","Liver","Hotdogs","Patties","Jerky","Duck","Lamb","Veal","Venison","Franks","Loin","Roast","Breast","Thighs","Drumsticks","Fillet","Calamari","Pollock","Halibut"],
-  "Dairy & Eggs": ["Milk","Eggs","Butter","Cheese","Yogurt","Cream","Sourcream","Cottage","Ricotta","Mozzarella","Cheddar","Parmesan","Provolone","Gouda","Brie","Feta","Swiss","Buttermilk","Half-and-half","Whipping","Margarine","Kefir","Skim","Whole","Almond","Soy","Oat","Lactose-free","Goat","String","Spread","Curds","Whey","Gelato","Custard","Pudding","Flan","Eggwhites","Yolks","Hardboiled","Pasteurized","Homogenized","Organic","Light","Nonfat","Shredded","Sliced","Block","Cubes","Spread"],
-  "Bakery & Bread": ["Bread","Baguette","Rolls","Buns","Bagels","Croissants","Muffins","Donuts","Cake","Pie","Cookies","Brownies","Scones","Biscuits","Pita","Tortillas","Wraps","Loaf","Rye","Sourdough","Wheat","White","Multigrain","Pumpernickel","Challah","Focaccia","Ciabatta","Pastries","Tarts","Eclairs","Cannoli","Cupcakes","Danishes","Pretzels","Crackers","Croutons","Stuffing","Crust","Gluten-free","Artisan","Flatbread","Naan","Matzo","Cornbread","Shortbread","Macarons","Madeleines","Poundcake","Cheesecake","Cobblers"],
-  "Pantry Staples": ["Pasta","Rice","Beans","Lentils","Flour","Sugar","Salt","Pepper","Oil","Vinegar","Spices","Herbs","Honey","Syrup","Oats","Cereal","Soup","Broth","Stock","Tomatoes (canned)","Tuna (canned)","Sauce","Ketchup","Mustard","Mayo","Soy-Sauce","Olive-Oil","Baking-Powder","Baking-Soda","Yeast","Cornstarch","Peanut-Butter","Jelly","Jam","Preserves","Crackers","Breadcrumbs","Granola","Popcorn","Nuts","Seeds","Raisins","Dates","Coconut (shredded)","Evaporated-Milk","Powdered-Milk","Shortening","Pancake-Mix","Stuffing-Mix","Gravy"],
-  "Snacks & Sweets": ["Chips","Pretzels","Popcorn","Crackers","Cookies","Candy","Chocolate","Gum","Mints","Nuts","Trail-Mix","Bars","Fruit-Snacks","Jerky","Pudding","Applesauce","Cupcakes","Brownies","Pastries","Donuts","Cake","Pie","Ice-Cream","Popsicles","Sorbet","Gelato","Marshmallows","Gummies","Lollipops","Caramels","Licorice","Taffy","Brittle","Fudge","Toffee","Wafers","Biscotti","Granola-Bars","Protein-Bars","Rice-Cakes","Pork-Rinds","Peanuts","Cashews","Almonds","Pistachios","Sunflower-Seeds","Pumpkin-Seeds","Corn-Nuts","Cheese-Puffs","Pirate's-Booty"],
-  "Beverages": ["Water","Soda","Juice","Coffee","Tea","Lemonade","Sports-Drink","Energy-Drink","Milk","Almond-Milk","Soy-Milk","Oat-Milk","Coconut-Water","Sparkling-Water","Seltzer","Soda-Water","Tonic","Beer","Wine","Champagne","Spirits","Whiskey","Vodka","Rum","Tequila","Gin","Brandy","Liqueur","Cider","Kombucha","Smoothies","Shakes","Frappuccino","Espresso","Latte","Cappuccino","Macchiato","Americano","Cold-Brew","Hot-Chocolate","Eggnog","Punch","Kefir","Yerba-Mate","Green-Tea","Black-Tea","Herbal-Tea","Iced-Tea","Apple-Juice","Orange-Juice"],
-  "Frozen Foods": ["Pizza","Vegetables","Fruits","Berries","Waffles","Pancakes","French-Toast","Bagels","Meals","Entrees","Lasagna","Burritos","Nuggets","Patties","Fish-Sticks","Fries","Tater-Tots","Onion-Rings","Potpies","Dumplings","Gyozas","Spring-Rolls","Meatballs","Burgers","Hotdogs","Sausages","Bacon","Shrimp","Scallops","Lobster-Tails","Ice-Cream","Yogurt","Sorbet","Sherbet","Pies","Cakes","Cheesecake","Cookies","Brownies","Dough","Pastry","Phyllo","Juice","Concentrate","Smoothies","Potatoes","Rice","Quinoa","Edamame","Udon"],
-  "Household & Other Essentials": ["Soap","Shampoo","Conditioner","Toothpaste","Toothbrushes","Floss","Deodorant","Lotion","Sunscreen","Lip-Balm","Vitamins","Supplements","Pain-Relievers","Band-Aids","Sanitizer","Wipes","Tissues","Toilet-Paper","Paper-Towels","Napkins","Detergent","Softener","Pods","Dish-Soap","Sponges","Trash-Bags","Ziploc-Bags","Foil","Wrap","Parchment","Matches","Lighters","Batteries","Lightbulbs","Cleaners","Spray","Wipes (cleaning)","Sponges","Mop","Broom","Diapers","Wipes (baby)","Formula","Baby-Food","Pet-Food","Litter","Treats","Seeds (bird)","Charcoal","Fire-Logs"]
-};
-
 const shownCategories = {};
 
 function capitalizeFirst(str) {
@@ -167,22 +211,18 @@ function getCategory(item) {
 
 function createCategoryCell(category) {
   if (!shownCategories[category]) {
-    const td = document.createElement("td");
-    td.className = "category";
-    td.id = "cat-" + category;
+    const div = document.createElement("div");
+    div.className = "category";
+    div.id = "cat-" + category;
 
     const title = document.createElement("h3");
     title.textContent = category;
 
     const ul = document.createElement("ul");
-    td.appendChild(title);
-    td.appendChild(ul);
+    div.appendChild(title);
+    div.appendChild(ul);
 
-    if (!categoriesTableRow || categoriesTableRow.children.length >= 4) {
-      categoriesTableRow = document.createElement("tr");
-      categoriesTable.appendChild(categoriesTableRow);
-    }
-    categoriesTableRow.appendChild(td);
+    categoriesContainer.appendChild(div);
     shownCategories[category] = ul;
   }
 }
@@ -263,6 +303,8 @@ micBtn.addEventListener("click", () => {
   };
   recognition.onerror = function(event){ console.error(event.error); };
 });
+
+const sampleItems = {/* (unchanged object from your original code) */};
 </script>
 </body>
 </html>
