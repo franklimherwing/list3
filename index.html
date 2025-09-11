@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Grocery List V12</title>
+<title>Grocery List V13</title>
 <style>
 body {
   font-family: Arial, sans-serif;
@@ -16,7 +16,7 @@ body {
   padding: 25px;
   border-radius: 12px;
   width: 95%;
-  max-width: 1200px;
+  max-width: 1400px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   position: relative;
 }
@@ -110,7 +110,7 @@ li.checked .checkedMark { display: inline; }
 </head>
 <body>
 <div class="container">
-<h1>Grocery List V12</h1>
+<h1>Grocery List V13</h1>
 <div class="input-container">
   <input type="text" id="itemInput" placeholder="Add grocery item...">
   <button id="addBtn">Add</button>
@@ -138,14 +138,14 @@ let categoriesTableRow = categoriesTable.querySelector("tr");
 let totalItems = 0;
 let pickedItems = 0;
 
-// Major categories and sample items
+// Sample items: 50+ per category
 const sampleItems = {
-  "Fruits": ["Apple","Banana","Orange","Strawberry","Grapes","Mango","Pineapple","Watermelon"],
-  "Vegetables": ["Carrot","Potato","Tomato","Lettuce","Spinach","Cucumber","Broccoli"],
-  "Dairy": ["Milk","Cheese","Butter","Yogurt"],
-  "Meat": ["Chicken","Beef","Pork","Bacon","Turkey"],
-  "Bakery": ["Bread","Bagel","Croissant","Cake","Muffin"],
-  "Beverages": ["Water","Juice","Soda","Tea","Coffee"],
+  "Fruits": ["Apple","Apricot","Avocado","Banana","Blackberry","Blueberry","Boysenberry","Cherry","Coconut","Cranberry","Currant","Date","Dragonfruit","Durian","Elderberry","Feijoa","Fig","Gooseberry","Grape","Grapefruit","Guava","Honeydew","Jackfruit","Jujube","Kiwi","Kumquat","Lemon","Lime","Lychee","Mandarin","Mango","Mulberry","Nectarine","Olive","Orange","Papaya","Passionfruit","Peach","Pear","Persimmon","Pineapple","Plum","Pomegranate","Quince","Raspberry","Redcurrant","Strawberry","Tangerine","Watermelon","Starfruit","Soursop"],
+  "Vegetables": ["Artichoke","Arugula","Asparagus","Beet","Bell Pepper","Bok Choy","Broccoli","Brussels Sprouts","Cabbage","Carrot","Cauliflower","Celery","Chard","Chayote","Collard Greens","Corn","Cucumber","Daikon","Eggplant","Endive","Fennel","Garlic","Ginger","Kale","Kohlrabi","Leek","Lettuce","Mushroom","Okra","Onion","Parsnip","Pea","Potato","Pumpkin","Radish","Rutabaga","Spinach","Squash","Sweet Potato","Tomato","Turnip","Watercress","Zucchini","Yam","Celery Root","Sorrel","Seaweed","Taro","Wasabi"],
+  "Dairy": ["Milk","Butter","Cheese","Yogurt","Cream","Sour Cream","Cottage Cheese","Ghee","Condensed Milk","Evaporated Milk","Buttermilk","Kefir","Paneer","Mascarpone","Ricotta","Feta","Blue Cheese","Parmesan","Swiss Cheese","Cream Cheese","Goat Cheese","Cow Milk","Sheep Milk","Skim Milk","Whole Milk","Half-and-Half","Clotted Cream","Whipping Cream","Powdered Milk","Flavored Yogurt","Greek Yogurt","Soy Milk","Almond Milk","Oat Milk","Rice Milk","Coconut Milk","Cashew Milk","Chocolate Milk","Cheddar","Provolone","Mozzarella","Havarti","Brie","Gruyere","Camembert","Monterey Jack","Romano","Neufchâtel"],
+  "Meat": ["Beef","Chicken","Pork","Lamb","Turkey","Duck","Veal","Bacon","Sausage","Ham","Salami","Prosciutto","Pastrami","Corned Beef","Ground Beef","Ground Turkey","Ground Chicken","Liver","Kidney","Heart","Tongue","Tripe","Ribs","Steak","Sirloin","Tenderloin","Brisket","Chuck","Shoulder","Leg","Thigh","Breast","Wiener","Hot Dog","Chorizo","Mortadella","Kielbasa","Bologna","Pepperoni","Spareribs","Rump","Short Ribs","Oxtail","Sausage Links","Sausage Patty","Duck Breast","Goose","Rabbit","Venison"],
+  "Bakery": ["Bread","Bagel","Brioche","Croissant","Donut","Muffin","Sourdough","Rolls","Baguette","Cake","Pie","Pretzel","Pita","Focaccia","Flatbread","Panini","English Muffin","Ciabatta","Brownie","Cupcake","Danish","Strudel","Eclair","Challah","Rugelach","Panettone","Hot Cross Bun","Scone","Bun","Biscuit","Tart","Quiche","Fritter","Dough","Cinnamon Roll","Cookies","Macaron","Madeleine","Loaf","Bun","Breadsticks","Bagette","Rye Bread","Whole Wheat Bread","Multigrain Bread","Banana Bread","Cornbread","Bread Roll","Babka","Pretzel Bun","Crumpet"],
+  "Beverages": ["Water","Juice","Soda","Tea","Coffee","Milkshake","Smoothie","Lemonade","Coconut Water","Energy Drink","Sports Drink","Iced Tea","Herbal Tea","Espresso","Latte","Cappuccino","Mocha","Americano","Hot Chocolate","Beer","Wine","Champagne","Cocktail","Whiskey","Vodka","Gin","Rum","Tequila","Brandy","Cider","Kombucha","Protein Shake","Soy Milk","Almond Milk","Oat Milk","Rice Milk","Iced Coffee","Matcha","Chai Latte","Bubble Tea","Sangria","Lassi","Watermelon Juice","Orange Juice","Apple Juice","Grape Juice","Cranberry Juice","Pineapple Juice","Tomato Juice","Carrot Juice","Beet Juice"]
 };
 
 const shownCategories = {};
@@ -234,7 +234,6 @@ function addItem() {
   li.appendChild(delBtn);
   ul.appendChild(li);
 
-  // Sort alphabetically
   const sortedLis = Array.from(ul.children).sort((a,b) => a.textContent.localeCompare(b.textContent));
   ul.innerHTML = "";
   sortedLis.forEach(l => ul.appendChild(l));
@@ -247,7 +246,6 @@ function addItem() {
 addBtn.addEventListener("click", addItem);
 input.addEventListener("keypress", function(e){ if(e.key==="Enter") addItem(); });
 
-// Microphone support
 micBtn.addEventListener("click", () => {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) { alert('Speech recognition not supported.'); return; }
