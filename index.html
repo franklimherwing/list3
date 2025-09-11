@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Grocery List V9</title>
+<title>Grocery List V10</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -110,7 +110,7 @@
 </head>
 <body>
 <div class="container">
-  <h1>Grocery List V9</h1>
+  <h1>Grocery List V10</h1>
   <div class="input-container">
     <input type="text" id="itemInput" placeholder="Add grocery item...">
     <button id="addBtn">Add</button>
@@ -163,15 +163,6 @@ function getCategory(item) {
 
 function createCategoryCell(category) {
   if (!shownCategories[category]) {
-    if (category === "Other") {
-      const rows = categoriesTable.querySelectorAll("tr");
-      categoriesTableRow = rows[rows.length-1] || categoriesTableRow;
-    } else if (categoriesTableRow.children.length >= 4) {
-      const newRow = document.createElement("tr");
-      categoriesTable.appendChild(newRow);
-      categoriesTableRow = newRow;
-    }
-
     const td = document.createElement("td");
     td.className = "category";
     td.id = "cat-" + category;
@@ -187,6 +178,10 @@ function createCategoryCell(category) {
     if (category === "Other") {
       categoriesTable.appendChild(td);
     } else {
+      if (!categoriesTableRow || categoriesTableRow.children.length >= 4) {
+        categoriesTableRow = document.createElement("tr");
+        categoriesTable.appendChild(categoriesTableRow);
+      }
       categoriesTableRow.appendChild(td);
     }
 
@@ -247,6 +242,7 @@ function addItem() {
   li.appendChild(delBtn);
   ul.appendChild(li);
 
+  // Sort alphabetically
   const sortedLis = Array.from(ul.children).sort((a,b) => a.textContent.localeCompare(b.textContent));
   ul.innerHTML = "";
   sortedLis.forEach(l => ul.appendChild(l));
@@ -257,33 +253,22 @@ function addItem() {
 }
 
 addBtn.addEventListener("click", addItem);
-input.addEventListener("keypress", function(e) {
-  if (e.key === "Enter") addItem();
-});
+input.addEventListener("keypress", function(e) { if(e.key==="Enter") addItem(); });
 
-// Microphone for iPhone Safari and other browsers
 micBtn.addEventListener("click", () => {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) {
-    alert('Speech recognition not supported in this browser.');
-    return;
-  }
+  if (!SpeechRecognition) { alert('Speech recognition not supported.'); return; }
   const recognition = new SpeechRecognition();
   recognition.lang = 'en-US';
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
-
   recognition.start();
-
   recognition.onresult = function(event) {
     const speechResult = event.results[0][0].transcript;
     input.value = speechResult;
     addItem();
   };
-
-  recognition.onerror = function(event) {
-    console.error(event.error);
-  };
+  recognition.onerror = function(event) { console.error(event.error); };
 });
 </script>
 </body>
