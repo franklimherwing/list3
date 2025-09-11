@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Grocery List V10</title>
+<title>Grocery List V11</title>
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -16,7 +16,7 @@
     padding: 25px;
     border-radius: 12px;
     width: 95%;
-    max-width: 1000px;
+    max-width: 1200px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     position: relative;
   }
@@ -110,7 +110,7 @@
 </head>
 <body>
 <div class="container">
-  <h1>Grocery List V10</h1>
+  <h1>Grocery List V11</h1>
   <div class="input-container">
     <input type="text" id="itemInput" placeholder="Add grocery item...">
     <button id="addBtn">Add</button>
@@ -171,19 +171,15 @@ function createCategoryCell(category) {
     title.textContent = category;
 
     const ul = document.createElement("ul");
-
     td.appendChild(title);
     td.appendChild(ul);
 
-    if (category === "Other") {
-      categoriesTable.appendChild(td);
-    } else {
-      if (!categoriesTableRow || categoriesTableRow.children.length >= 4) {
-        categoriesTableRow = document.createElement("tr");
-        categoriesTable.appendChild(categoriesTableRow);
-      }
-      categoriesTableRow.appendChild(td);
+    // Add td to row or create new row if >4 columns
+    if (!categoriesTableRow || categoriesTableRow.children.length >= 4) {
+      categoriesTableRow = document.createElement("tr");
+      categoriesTable.appendChild(categoriesTableRow);
     }
+    categoriesTableRow.appendChild(td);
 
     shownCategories[category] = ul;
   }
@@ -200,7 +196,6 @@ function updateStats() {
 function addItem() {
   let value = input.value.trim();
   if (!value) return;
-
   value = capitalizeFirst(value);
   const category = getCategory(value);
 
@@ -242,7 +237,7 @@ function addItem() {
   li.appendChild(delBtn);
   ul.appendChild(li);
 
-  // Sort alphabetically
+  // Sort items alphabetically
   const sortedLis = Array.from(ul.children).sort((a,b) => a.textContent.localeCompare(b.textContent));
   ul.innerHTML = "";
   sortedLis.forEach(l => ul.appendChild(l));
@@ -255,6 +250,7 @@ function addItem() {
 addBtn.addEventListener("click", addItem);
 input.addEventListener("keypress", function(e) { if(e.key==="Enter") addItem(); });
 
+// Microphone support
 micBtn.addEventListener("click", () => {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   if (!SpeechRecognition) { alert('Speech recognition not supported.'); return; }
