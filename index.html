@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Grocery List V4</title>
+  <title>Grocery List V6</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -84,7 +84,6 @@
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      transition: background 0.3s;
       font-weight: bold;
       position: relative;
     }
@@ -112,7 +111,7 @@
 </head>
 <body>
   <div class="container">
-    <h2>Grocery List V4</h2>
+    <h2>Grocery List V6</h2>
     <input type="text" id="itemInput" placeholder="Add grocery item...">
     <button id="addBtn">Add</button>
     <button id="micBtn">🎤</button>
@@ -123,7 +122,8 @@
     const input = document.getElementById("itemInput");
     const addBtn = document.getElementById("addBtn");
     const micBtn = document.getElementById("micBtn");
-    let categoriesTableRow = document.getElementById("categoriesTable").querySelector("tr");
+    let categoriesTable = document.getElementById("categoriesTable");
+    let categoriesTableRow = categoriesTable.querySelector("tr");
 
     const categories = {
       "Fruits": ["Apple","Apricot","Avocado","Banana","Blackberry","Blueberry","Cherry","Coconut","Cranberry","Date","Dragonfruit","Fig","Grape","Grapefruit","Kiwi","Lemon","Lime","Mango","Melon","Nectarine","Orange","Papaya","Peach","Pear","Pineapple","Plum","Pomegranate","Raspberry","Strawberry","Watermelon"],
@@ -143,23 +143,20 @@
     function getCategory(item) {
       const lower = item.toLowerCase();
       for (const [category, items] of Object.entries(categories)) {
-        if (items.map(i=>i.toLowerCase()).includes(lower)) return category;
+        if (items.map(i => i.toLowerCase()).includes(lower)) return category;
       }
       return "Other";
     }
 
-    function addItem() {
-      let value = input.value.trim();
-      if (!value) return;
-
-      value = capitalizeFirst(value);
-      const category = getCategory(value);
-
-      // Create category cell if not shown
+    function createCategoryCell(category) {
       if (!shownCategories[category]) {
-        if (categoriesTableRow.children.length >= 4) {
+        if (category === "Other") {
+          // always append Other at the end
+          const newRow = categoriesTable.querySelectorAll("tr");
+          categoriesTableRow = newRow[newRow.length - 1] || categoriesTableRow;
+        } else if (categoriesTableRow.children.length >= 4) {
           const newRow = document.createElement("tr");
-          document.getElementById("categoriesTable").appendChild(newRow);
+          categoriesTable.appendChild(newRow);
           categoriesTableRow = newRow;
         }
 
@@ -174,11 +171,25 @@
 
         td.appendChild(title);
         td.appendChild(ul);
-        categoriesTableRow.appendChild(td);
+
+        if (category === "Other") {
+          categoriesTable.appendChild(td);
+        } else {
+          categoriesTableRow.appendChild(td);
+        }
 
         shownCategories[category] = ul;
       }
+    }
 
+    function addItem() {
+      let value = input.value.trim();
+      if (!value) return;
+
+      value = capitalizeFirst(value);
+      const category = getCategory(value);
+
+      createCategoryCell(category);
       const ul = shownCategories[category];
 
       const li = document.createElement("li");
@@ -211,8 +222,7 @@
       li.appendChild(delBtn);
       ul.appendChild(li);
 
-      // Sort alphabetically
-      const sortedLis = Array.from(ul.children).sort((a,b)=>a.textContent.localeCompare(b.textContent));
+      const sortedLis = Array.from(ul.children).sort((a,b) => a.textContent.localeCompare(b.textContent));
       ul.innerHTML = "";
       sortedLis.forEach(l => ul.appendChild(l));
 
@@ -224,7 +234,6 @@
       if (e.key === "Enter") addItem();
     });
 
-    // Microphone with proper API
     micBtn.addEventListener("click", () => {
       const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SpeechRecognition) {
@@ -247,6 +256,14 @@
       recognition.onerror = function(event) {
         console.error(event.error);
       };
+    });
+
+    // Preload sample items
+    Object.keys(categories).forEach(cat => {
+      categories[cat].sort().forEach(item => {
+        input.value = item;
+        addItem();
+      });
     });
   </script>
 </body>
