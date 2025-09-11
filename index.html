@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Grocery List V18</title>
+  <title>Grocery List V20</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * { box-sizing: border-box; }
@@ -67,7 +67,7 @@
     }
     td {
       vertical-align: top;
-      width: 25%;
+      width: 33.33%;
     }
     .category h3 {
       text-align: center;
@@ -119,7 +119,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Grocery List V18</h1>
+    <h1>Grocery List V20</h1>
     <div class="input-container">
       <input type="text" id="itemInput" placeholder="Add grocery item(s), separate multiple items with commas...">
       <button id="addBtn">Add</button>
@@ -133,16 +133,16 @@
   </div>
 
   <script>
-    const sampleItems = {
-      "Fruits & Vegetables": ["Apples","Bananas","Oranges","Strawberries","Grapes","Lemons","Avocados","Blueberries","Peaches","Melons","Mangos","Pineapples","Tomatoes","Potatoes","Onions","Carrots","Lettuce","Spinach","Kale","Broccoli","Peppers","Cucumbers","Celery","Garlic","Mushrooms","Corn","Peas","Squash","Zucchini","Asparagus","Radishes","Beets","Cabbage","Ginger","Limes","Pears","Plums","Cherries","Raspberries","Blackberries","Cranberries","Papayas","Artichokes","Eggplant","Okra","Leeks","Turnips","Rutabagas","Parsnips","Cilantro"],
-      "Meat & Seafood": ["Chicken","Beef","Pork","Bacon","Sausage","Steak","Ribs","Ham","Turkey","Salmon","Tuna","Shrimp","Cod","Tilapia","Scallops","Crab","Lobster","Clams","Mussels","Oysters","Trout","Haddock","Catfish","Sardines","Anchovies","Pepperoni","Salami","Brisket","Chops","Wings","Ground","Liver","Hotdogs","Patties","Jerky","Duck","Lamb","Veal","Venison","Franks","Loin","Roast","Breast","Thighs","Drumsticks","Fillet","Calamari","Pollock","Halibut"],
-      "Dairy & Eggs": ["Milk","Eggs","Butter","Cheese","Yogurt","Cream","Sourcream","Cottage","Ricotta","Mozzarella","Cheddar","Parmesan","Provolone","Gouda","Brie","Feta","Swiss","Buttermilk","Half-and-half","Whipping","Margarine","Kefir","Skim","Whole","Almond","Soy","Oat","Lactose-free","Goat","String","Spread","Curds","Whey","Gelato","Custard","Pudding","Flan","Eggwhites","Yolks","Hardboiled","Pasteurized","Homogenized","Organic","Light","Nonfat","Shredded","Sliced","Block","Cubes","Spread"],
-      "Bakery & Bread": ["Bread","Baguette","Rolls","Buns","Bagels","Croissants","Muffins","Donuts","Cake","Pie","Cookies","Brownies","Scones","Biscuits","Pita","Tortillas","Wraps","Loaf","Rye","Sourdough","Wheat","White","Multigrain","Pumpernickel","Challah","Focaccia","Ciabatta","Pastries","Tarts","Eclairs","Cannoli","Cupcakes","Danishes","Pretzels","Crackers","Croutons","Stuffing","Crust","Gluten-free","Artisan","Flatbread","Naan","Matzo","Cornbread","Shortbread","Macarons","Madeleines","Poundcake","Cheesecake","Cobblers"],
-      "Pantry Staples": ["Pasta","Rice","Beans","Lentils","Flour","Sugar","Salt","Pepper","Oil","Vinegar","Spices","Herbs","Honey","Syrup","Oats","Cereal","Soup","Broth","Stock","Tomatoes (canned)","Tuna (canned)","Sauce","Ketchup","Mustard","Mayo","Soy-Sauce","Olive-Oil","Baking-Powder","Baking-Soda","Yeast","Cornstarch","Peanut-Butter","Jelly","Jam","Preserves","Crackers","Breadcrumbs","Granola","Popcorn","Nuts","Seeds","Raisins","Dates","Coconut (shredded)","Evaporated-Milk","Powdered-Milk","Shortening","Pancake-Mix","Stuffing-Mix","Gravy"],
-      "Snacks & Sweets": ["Chips","Pretzels","Popcorn","Crackers","Cookies","Candy","Chocolate","Gum","Mints","Nuts","Trail-Mix","Bars","Fruit-Snacks","Jerky","Pudding","Applesauce","Cupcakes","Brownies","Pastries","Donuts","Cake","Pie","Ice-Cream","Popsicles","Sorbet","Gelato","Marshmallows","Gummies","Lollipops","Caramels","Licorice","Taffy","Brittle","Fudge","Toffee","Wafers","Biscotti","Granola-Bars","Protein-Bars","Rice-Cakes","Pork-Rinds","Peanuts","Cashews","Almonds","Pistachios","Sunflower-Seeds","Pumpkin-Seeds","Corn-Nuts","Cheese-Puffs","Pirate's-Booty"],
-      "Beverages": ["Water","Soda","Juice","Coffee","Tea","Lemonade","Sports-Drink","Energy-Drink","Milk","Almond-Milk","Soy-Milk","Oat-Milk","Coconut-Water","Sparkling-Water","Seltzer","Soda-Water","Tonic","Kombucha","Smoothies","Shakes","Frappuccino","Espresso","Latte","Cappuccino","Macchiato","Americano","Cold-Brew","Hot-Chocolate","Eggnog","Punch","Kefir","Yerba-Mate","Green-Tea","Black-Tea","Herbal-Tea","Iced-Tea","Apple-Juice","Orange-Juice"],
-      "Frozen Foods": ["Pizza","Vegetables","Fruits","Berries","Waffles","Pancakes","French-Toast","Bagels","Meals","Entrees","Lasagna","Burritos","Nuggets","Patties","Fish-Sticks","Fries","Tater-Tots","Onion-Rings","Potpies","Dumplings","Gyozas","Spring-Rolls","Meatballs","Burgers","Hotdogs","Sausages","Bacon","Shrimp","Scallops","Lobster-Tails","Ice-Cream","Yogurt","Sorbet","Sherbet","Pies","Cakes","Cheesecake","Cookies","Brownies","Dough","Pastry","Phyllo","Juice","Concentrate","Smoothies","Potatoes","Rice","Quinoa","Edamame","Udon"],
-      "Household & Other Essentials": ["Soap","Shampoo","Conditioner","Toothpaste","Toothbrushes","Floss","Deodorant","Lotion","Sunscreen","Lip-Balm","Vitamins","Supplements","Pain-Relievers","Band-Aids","Sanitizer","Wipes","Tissues","Toilet-Paper","Paper-Towels","Napkins","Detergent","Softener","Pods","Dish-Soap","Sponges","Trash-Bags","Ziploc-Bags","Foil","Wrap","Parchment","Matches","Lighters","Batteries","Lightbulbs","Cleaners","Spray","Wipes (cleaning)","Sponges","Mop","Broom","Diapers","Wipes (baby)","Formula","Baby-Food","Pet-Food","Litter","Treats","Seeds (bird)","Charcoal","Fire-Logs"]
+    const categoriesKeywords = {
+      "Fruits & Vegetables": ["apple","banana","orange","strawberry","grape","lemon","avocado","blueberry","peach","melon","mango","pineapple","tomato","potato","onion","carrot","lettuce","spinach","kale","broccoli","pepper","cucumber","celery","garlic","mushroom","corn","pea","squash","zucchini","asparagus","radish","beet","cabbage","ginger","lime","pear","plum","cherry","raspberry","blackberry","cranberry","papaya","artichoke","eggplant","okra","leek","turnip","rutabaga","parsnip","cilantro"],
+      "Meat & Seafood": ["chicken","beef","pork","bacon","sausage","steak","rib","ham","turkey","salmon","tuna","shrimp","cod","tilapia","scallop","crab","lobster","clam","mussel","oyster","trout","haddock","catfish","sardine","anchovy","pepperoni","salami","brisket","chop","wing","ground","liver","hotdog","patty","jerky","duck","lamb","veal","venison","loin","roast","breast","thigh","drumstick","fillet","calamari","pollock","halibut"],
+      "Dairy & Eggs": ["milk","egg","butter","cheese","yogurt","cream","sourcream","cottage","ricotta","mozzarella","cheddar","parmesan","provolone","gouda","brie","feta","swiss","buttermilk","half","whipping","margarine","kefir","skim","whole","almond","soy","oat","lactose","goat","string","spread","curd","whey","gelato","custard","pudding","flan","eggwhite","yolk"],
+      "Bakery & Bread": ["bread","baguette","roll","bun","bagel","croissant","muffin","donut","cake","pie","cookie","brownie","scone","biscuit","pita","tortilla","wrap","loaf","rye","sourdough","wheat","white","multigrain","pumpernickel","challah","focaccia","ciabatta","pastry","tart","eclair","cannoli","cupcake","danish","pretzel","cracker","crouton","stuffing","crust","flatbread","naan","cornbread","shortbread","macaron","madeleine","poundcake","cheesecake","cobbler"],
+      "Pantry Staples": ["pasta","rice","bean","lentil","flour","sugar","salt","pepper","oil","vinegar","spice","herb","honey","syrup","oats","cereal","soup","broth","stock","tomato","sauce","ketchup","mustard","mayo","soy","olive","baking","yeast","cornstarch","peanut","jelly","jam","preserve","granola","popcorn","nut","seed","raisin","date","coconut","milk","shortening","pancake","stuffing","gravy"],
+      "Snacks & Sweets": ["chip","pretzel","popcorn","cracker","cookie","candy","chocolate","gum","mint","trail","bar","fruit","pudding","applesauce","cupcake","brownie","pastry","donut","cake","pie","ice","popsicle","sorbet","gelato","marshmallow","gummi","lollipop","caramel","licorice","taffy","brittle","fudge","toffee","wafer","protein","rice","pork","peanut","cashew","almond","pistachio","sunflower","pumpkin","cheese","pirate"],
+      "Beverages": ["water","soda","juice","coffee","tea","lemonade","drink","milk","almond","soy","oat","coconut","sparkling","seltzer","tonic","beer","wine","champagne","whiskey","vodka","rum","tequila","gin","brandy","liqueur","cider","kombucha","smoothie","shake","frappuccino","espresso","latte","cappuccino","macchiato","americano","chocolate","eggnog","punch","yerba"],
+      "Frozen Foods": ["pizza","vegetable","fruit","berry","waffle","pancake","french","bagel","meal","entree","lasagna","burrito","nugget","patty","fish","stick","fry","tater","onion","potpie","dumpling","gyoza","spring","roll","meatball","burger","hotdog","sausage","bacon","shrimp","scallop","lobster","ice","yogurt","sorbet","sherbet","pie","cake","cheesecake","cookie","brownie","dough","pastry","phyllo","juice","concentrate","smoothie","potato","rice","quinoa","edamame","udon"],
+      "Household & Other Essentials": ["soap","shampoo","conditioner","toothpaste","toothbrush","floss","deodorant","lotion","sunscreen","lip","vitamin","supplement","pain","band","sanitizer","wipe","tissue","toilet","paper","napkin","detergent","softener","pod","dish","sponge","trash","ziploc","foil","wrap","parchment","match","lighter","battery","light","cleaner","mop","broom","diaper","formula","baby","pet","litter","treat","seed","charcoal","fire"]
     };
 
     const input = document.getElementById("itemInput");
@@ -164,8 +164,10 @@
 
     function getCategory(item) {
       const lower = item.toLowerCase();
-      for (const [category, items] of Object.entries(sampleItems)) {
-        if (items.some(i => i.toLowerCase() === lower)) return category;
+      for (const [category, keywords] of Object.entries(categoriesKeywords)) {
+        if (keywords.some(kw => lower.includes(kw))) {
+          return category;
+        }
       }
       return "Other";
     }
@@ -180,7 +182,7 @@
         const ul = document.createElement("ul");
         td.appendChild(title);
         td.appendChild(ul);
-        if (!categoriesTableRow || categoriesTableRow.children.length >= 4) {
+        if (!categoriesTableRow || categoriesTableRow.children.length >= 3) {
           categoriesTableRow = document.createElement("tr");
           categoriesTable.appendChild(categoriesTableRow);
         }
@@ -217,8 +219,7 @@
         li.addEventListener("click", function(e) {
           if (e.target.tagName !== "BUTTON") {
             li.classList.toggle("checked");
-            if (li.classList.contains("checked")) pickedItems++;
-            else pickedItems--;
+            li.classList.contains("checked") ? pickedItems++ : pickedItems--;
             updateStats();
           }
         });
@@ -241,7 +242,6 @@
         li.appendChild(delBtn);
         ul.appendChild(li);
 
-        // Sort items
         const sortedLis = Array.from(ul.children).sort((a,b) => a.textContent.localeCompare(b.textContent));
         ul.innerHTML = "";
         sortedLis.forEach(l => ul.appendChild(l));
@@ -256,14 +256,6 @@
     input.addEventListener("keypress", function(e) {
       if (e.key === "Enter") { e.preventDefault(); addItem(); }
     });
-
-    // Preload all sample items
-    for (const cat of Object.keys(sampleItems)) {
-      for (const item of sampleItems[cat]) {
-        input.value = item;
-        addItem();
-      }
-    }
   </script>
 </body>
 </html>
