@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Grocery List V6</title>
+  <title>Grocery List V7</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -18,20 +18,22 @@
       width: 95%;
       max-width: 1000px;
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      position: relative;
     }
     h2 {
       text-align: center;
       margin-bottom: 20px;
     }
     #itemInput {
-      width: 70%;
-      padding: 12px;
-      font-size: 16px;
+      width: 80%;
+      padding: 14px;
+      font-size: 18px;
       border: 1px solid #ddd;
       border-radius: 6px;
+      margin-bottom: 10px;
     }
     #addBtn {
-      padding: 10px 16px;
+      padding: 12px 18px;
       background: #28a745;
       color: white;
       border: none;
@@ -50,6 +52,14 @@
       cursor: pointer;
       margin-left: 5px;
       vertical-align: middle;
+    }
+    .stats {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      text-align: right;
+      font-size: 14px;
+      color: #333;
     }
     table {
       width: 100%;
@@ -76,8 +86,8 @@
     }
     li {
       background: #fafafa;
-      padding: 8px;
-      margin: 6px 0;
+      padding: 6px 8px;
+      margin: 4px 0;
       border: 1px solid #ddd;
       border-radius: 8px;
       display: flex;
@@ -90,7 +100,7 @@
     .checkedMark {
       color: green;
       font-weight: bold;
-      margin-right: 5px;
+      margin-right: 4px;
       display: none;
     }
     li.checked .checkedMark {
@@ -102,7 +112,7 @@
       border: none;
       background: none;
       cursor: pointer;
-      margin-left: 5px;
+      margin-left: 4px;
     }
     .deleteBtn:hover {
       color: darkred;
@@ -111,10 +121,17 @@
 </head>
 <body>
   <div class="container">
-    <h2>Grocery List V6</h2>
-    <input type="text" id="itemInput" placeholder="Add grocery item...">
-    <button id="addBtn">Add</button>
-    <button id="micBtn">🎤</button>
+    <h2>Grocery List V7</h2>
+    <div style="display:flex; align-items:center; margin-bottom:10px;">
+      <input type="text" id="itemInput" placeholder="Add grocery item...">
+      <button id="addBtn">Add</button>
+      <button id="micBtn">🎤</button>
+    </div>
+    <div class="stats">
+      <div>Total Items: <span id="totalItems">0</span></div>
+      <div>Picked: <span id="pickedItems">0</span> / <span id="totalItems2">0</span></div>
+      <div>Completion: <span id="completionPercent">0%</span> Complete</div>
+    </div>
     <table id="categoriesTable"><tr></tr></table>
   </div>
 
@@ -122,16 +139,24 @@
     const input = document.getElementById("itemInput");
     const addBtn = document.getElementById("addBtn");
     const micBtn = document.getElementById("micBtn");
+    const totalItemsElem = document.getElementById("totalItems");
+    const totalItems2Elem = document.getElementById("totalItems2");
+    const pickedItemsElem = document.getElementById("pickedItems");
+    const completionElem = document.getElementById("completionPercent");
+
     let categoriesTable = document.getElementById("categoriesTable");
     let categoriesTableRow = categoriesTable.querySelector("tr");
+    let totalItems = 0;
+    let pickedItems = 0;
 
-    const categories = {
-      "Fruits": ["Apple","Apricot","Avocado","Banana","Blackberry","Blueberry","Cherry","Coconut","Cranberry","Date","Dragonfruit","Fig","Grape","Grapefruit","Kiwi","Lemon","Lime","Mango","Melon","Nectarine","Orange","Papaya","Peach","Pear","Pineapple","Plum","Pomegranate","Raspberry","Strawberry","Watermelon"],
-      "Vegetables": ["Artichoke","Asparagus","Beet","Bell Pepper","Broccoli","Brussels Sprouts","Cabbage","Carrot","Cauliflower","Celery","Corn","Cucumber","Eggplant","Garlic","Kale","Leek","Lettuce","Mushroom","Onion","Parsnip","Pea","Potato","Pumpkin","Radish","Spinach","Squash","Sweet Potato","Tomato","Turnip","Zucchini"],
-      "Dairy": ["Butter","Cheese","Cream","Milk","Yogurt"],
-      "Meat": ["Bacon","Beef","Chicken","Duck","Lamb","Pork","Sausage","Turkey"],
-      "Bakery": ["Bagel","Bread","Brioche","Croissant","Donut","Muffin","Sourdough"],
-      "Beverages": ["Coffee","Juice","Soda","Tea","Water","Wine","Beer"]
+    // Expanded sample items for validation
+    const sampleItems = {
+      "Fruits": ["Apple","Apricot","Avocado","Banana","Blackberry","Blueberry","Cherry","Coconut","Cranberry","Date","Dragonfruit","Fig","Grape","Grapefruit","Kiwi","Lemon","Lime","Mango","Melon","Nectarine","Orange","Papaya","Peach","Pear","Pineapple","Plum","Pomegranate","Raspberry","Strawberry","Watermelon","Passionfruit","Starfruit","Tangerine","Guava","Lychee","Mulberry","Persimmon"],
+      "Vegetables": ["Artichoke","Asparagus","Beet","Bell Pepper","Broccoli","Brussels Sprouts","Cabbage","Carrot","Cauliflower","Celery","Corn","Cucumber","Eggplant","Garlic","Kale","Leek","Lettuce","Mushroom","Onion","Parsnip","Pea","Potato","Pumpkin","Radish","Spinach","Squash","Sweet Potato","Tomato","Turnip","Zucchini","Okra","Rutabaga","Chayote","Fennel","Bok Choy","Collard Greens","Endive"],
+      "Dairy": ["Butter","Cheese","Cream","Milk","Yogurt","Sour Cream","Cottage Cheese"],
+      "Meat": ["Bacon","Beef","Chicken","Duck","Lamb","Pork","Sausage","Turkey","Ham","Veal"],
+      "Bakery": ["Bagel","Bread","Brioche","Croissant","Donut","Muffin","Sourdough","Rolls","Baguette","Cake","Pie"],
+      "Beverages": ["Coffee","Juice","Soda","Tea","Water","Wine","Beer","Milkshake","Smoothie","Lemonade"]
     };
 
     const shownCategories = {};
@@ -142,7 +167,7 @@
 
     function getCategory(item) {
       const lower = item.toLowerCase();
-      for (const [category, items] of Object.entries(categories)) {
+      for (const [category, items] of Object.entries(sampleItems)) {
         if (items.map(i => i.toLowerCase()).includes(lower)) return category;
       }
       return "Other";
@@ -151,9 +176,8 @@
     function createCategoryCell(category) {
       if (!shownCategories[category]) {
         if (category === "Other") {
-          // always append Other at the end
           const newRow = categoriesTable.querySelectorAll("tr");
-          categoriesTableRow = newRow[newRow.length - 1] || categoriesTableRow;
+          categoriesTableRow = newRow[newRow.length-1] || categoriesTableRow;
         } else if (categoriesTableRow.children.length >= 4) {
           const newRow = document.createElement("tr");
           categoriesTable.appendChild(newRow);
@@ -182,6 +206,14 @@
       }
     }
 
+    function updateStats() {
+      totalItemsElem.textContent = totalItems;
+      totalItems2Elem.textContent = totalItems;
+      pickedItemsElem.textContent = pickedItems;
+      let percent = totalItems === 0 ? 0 : Math.round((pickedItems/totalItems)*100);
+      completionElem.textContent = percent + "%";
+    }
+
     function addItem() {
       let value = input.value.trim();
       if (!value) return;
@@ -205,6 +237,8 @@
       li.addEventListener("click", function(e) {
         if (e.target.tagName !== "BUTTON") {
           li.classList.toggle("checked");
+          pickedItems += li.classList.contains("checked") ? 1 : -1;
+          updateStats();
         }
       });
 
@@ -212,7 +246,10 @@
       delBtn.textContent = "x";
       delBtn.className = "deleteBtn";
       delBtn.onclick = function() {
+        if (li.classList.contains("checked")) pickedItems--;
         li.remove();
+        totalItems--;
+        updateStats();
         if (ul.children.length === 0) {
           document.getElementById("cat-" + category).remove();
           delete shownCategories[category];
@@ -226,6 +263,8 @@
       ul.innerHTML = "";
       sortedLis.forEach(l => ul.appendChild(l));
 
+      totalItems++;
+      updateStats();
       input.value = "";
     }
 
@@ -256,14 +295,6 @@
       recognition.onerror = function(event) {
         console.error(event.error);
       };
-    });
-
-    // Preload sample items
-    Object.keys(categories).forEach(cat => {
-      categories[cat].sort().forEach(item => {
-        input.value = item;
-        addItem();
-      });
     });
   </script>
 </body>
