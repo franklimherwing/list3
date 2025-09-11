@@ -1,230 +1,290 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Grocery List V8</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      padding: 40px;
-    }
-    .container {
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      width: 95%;
-      max-width: 1000px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      position: relative;
-    }
-    h1 {
-      text-align: center;
-      font-size: 32px;
-      margin-bottom: 20px;
-    }
-    #itemInput {
-      width: 80%;
-      padding: 16px;
-      font-size: 18px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
-    #addBtn {
-      padding: 12px 18px;
-      background: #28a745;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-left: 5px;
-      font-size: 16px;
-    }
-    #addBtn:hover {
-      background: #218838;
-    }
-    #micBtn {
-      background: none;
-      border: none;
-      font-size: 22px;
-      cursor: pointer;
-      margin-left: 5px;
-      vertical-align: middle;
-    }
-    .stats {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      text-align: right;
-      font-size: 14px;
-      color: #333;
-      line-height: 1.4;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    td {
-      vertical-align: top;
-      width: 25%;
-      padding: 10px;
-    }
-    .category h3 {
-      margin-bottom: 10px;
-      border-bottom: 1px solid #ccc;
-      padding-bottom: 4px;
-      font-size: 1.1em;
-      color: #333;
-      text-align: center;
-    }
-    ul {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-    li {
-      background: #fafafa;
-      padding: 6px 8px;
-      margin: 4px 0;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      font-weight: bold;
-      position: relative;
-    }
-    .checkedMark {
-      color: green;
-      font-weight: bold;
-      margin-right: 4px;
-      display: none;
-    }
-    li.checked .checkedMark {
-      display: inline;
-    }
-    .deleteBtn {
-      font-size: 14px;
-      color: red;
-      border: none;
-      background: none;
-      cursor: pointer;
-      margin-left: 4px;
-    }
-    .deleteBtn:hover {
-      color: darkred;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>Grocery List V9</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    padding: 40px;
+  }
+  .container {
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    width: 95%;
+    max-width: 1000px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    position: relative;
+  }
+  h1 {
+    text-align: center;
+    font-size: 36px;
+    margin-bottom: 25px;
+  }
+  .input-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+    gap: 10px;
+  }
+  #itemInput {
+    width: 60%;
+    padding: 18px;
+    font-size: 20px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    text-align: center;
+  }
+  #addBtn {
+    padding: 16px 22px;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+  }
+  #addBtn:hover { background: #218838; }
+  #micBtn {
+    background: #007bff;
+    border: none;
+    font-size: 20px;
+    padding: 16px 20px;
+    cursor: pointer;
+    border-radius: 6px;
+    color: white;
+  }
+  #micBtn:hover { background: #0062cc; }
+  .stats {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    text-align: right;
+    font-size: 14px;
+    color: #333;
+    line-height: 1.4;
+  }
+  table { width: 100%; border-collapse: collapse; margin-top: 25px; }
+  td {
+    vertical-align: top;
+    width: 25%;
+    padding: 10px;
+  }
+  .category h3 {
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4px;
+    font-size: 1.1em;
+    color: #333;
+    text-align: center;
+  }
+  ul { list-style-type: none; padding: 0; margin: 0; }
+  li {
+    background: #fafafa;
+    padding: 6px 8px;
+    margin: 4px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  .checkedMark { color: green; font-weight: bold; margin-right: 4px; display: none; }
+  li.checked .checkedMark { display: inline; }
+  .deleteBtn {
+    font-size: 14px;
+    color: red;
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin-left: 4px;
+  }
+  .deleteBtn:hover { color: darkred; }
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>Grocery List V8</h1>
-    <div style="display:flex; align-items:center; margin-bottom:10px;">
-      <input type="text" id="itemInput" placeholder="Add grocery item...">
-      <button id="addBtn">Add</button>
-      <button id="micBtn">🎤</button>
-    </div>
-    <div class="stats">
-      <div>Total Items: <span id="totalItems">0</span></div>
-      <div>Picked: <span id="pickedItems">0</span> / <span id="totalItems2">0</span></div>
-      <div><span id="completionPercent">0%</span></div>
-    </div>
-    <table id="categoriesTable"><tr></tr></table>
+<div class="container">
+  <h1>Grocery List V9</h1>
+  <div class="input-container">
+    <input type="text" id="itemInput" placeholder="Add grocery item...">
+    <button id="addBtn">Add</button>
+    <button id="micBtn">🎤</button>
   </div>
+  <div class="stats">
+    <div>Total Items: <span id="totalItems">0</span></div>
+    <div>Picked: <span id="pickedItems">0</span> / <span id="totalItems2">0</span></div>
+    <div><span id="completionPercent">0%</span></div>
+  </div>
+  <table id="categoriesTable"><tr></tr></table>
+</div>
 
-  <script>
-    const input = document.getElementById("itemInput");
-    const addBtn = document.getElementById("addBtn");
-    const micBtn = document.getElementById("micBtn");
-    const totalItemsElem = document.getElementById("totalItems");
-    const totalItems2Elem = document.getElementById("totalItems2");
-    const pickedItemsElem = document.getElementById("pickedItems");
-    const completionElem = document.getElementById("completionPercent");
+<script>
+const input = document.getElementById("itemInput");
+const addBtn = document.getElementById("addBtn");
+const micBtn = document.getElementById("micBtn");
+const totalItemsElem = document.getElementById("totalItems");
+const totalItems2Elem = document.getElementById("totalItems2");
+const pickedItemsElem = document.getElementById("pickedItems");
+const completionElem = document.getElementById("completionPercent");
 
-    let categoriesTable = document.getElementById("categoriesTable");
-    let categoriesTableRow = categoriesTable.querySelector("tr");
-    let totalItems = 0;
-    let pickedItems = 0;
+let categoriesTable = document.getElementById("categoriesTable");
+let categoriesTableRow = categoriesTable.querySelector("tr");
+let totalItems = 0;
+let pickedItems = 0;
 
-    const sampleItems = {
-      "Fruits": ["Apple","Apricot","Avocado","Banana","Blackberry","Blueberry","Cherry","Coconut","Cranberry","Date","Dragonfruit","Fig","Grape","Grapefruit","Kiwi","Lemon","Lime","Mango","Melon","Nectarine","Orange","Papaya","Peach","Pear","Pineapple","Plum","Pomegranate","Raspberry","Strawberry","Watermelon","Passionfruit","Starfruit","Tangerine","Guava","Lychee","Mulberry","Persimmon"],
-      "Vegetables": ["Artichoke","Asparagus","Beet","Bell Pepper","Broccoli","Brussels Sprouts","Cabbage","Carrot","Cauliflower","Celery","Corn","Cucumber","Eggplant","Garlic","Kale","Leek","Lettuce","Mushroom","Onion","Parsnip","Pea","Potato","Pumpkin","Radish","Spinach","Squash","Sweet Potato","Tomato","Turnip","Zucchini","Okra","Rutabaga","Chayote","Fennel","Bok Choy","Collard Greens","Endive"],
-      "Dairy": ["Butter","Cheese","Cream","Milk","Yogurt","Sour Cream","Cottage Cheese"],
-      "Meat": ["Bacon","Beef","Chicken","Duck","Lamb","Pork","Sausage","Turkey","Ham","Veal"],
-      "Bakery": ["Bagel","Bread","Brioche","Croissant","Donut","Muffin","Sourdough","Rolls","Baguette","Cake","Pie"],
-      "Beverages": ["Coffee","Juice","Soda","Tea","Water","Wine","Beer","Milkshake","Smoothie","Lemonade"]
-    };
+const sampleItems = {
+  "Fruits": ["Apple","Apricot","Avocado","Banana","Blackberry","Blueberry","Cherry","Coconut","Cranberry","Date","Dragonfruit","Fig","Grape","Grapefruit","Kiwi","Lemon","Lime","Mango","Melon","Nectarine","Orange","Papaya","Peach","Pear","Pineapple","Plum","Pomegranate","Raspberry","Strawberry","Watermelon","Passionfruit","Starfruit","Tangerine","Guava","Lychee","Mulberry","Persimmon"],
+  "Vegetables": ["Artichoke","Asparagus","Beet","Bell Pepper","Broccoli","Brussels Sprouts","Cabbage","Carrot","Cauliflower","Celery","Corn","Cucumber","Eggplant","Garlic","Kale","Leek","Lettuce","Mushroom","Onion","Parsnip","Pea","Potato","Pumpkin","Radish","Spinach","Squash","Sweet Potato","Tomato","Turnip","Zucchini","Okra","Rutabaga","Chayote","Fennel","Bok Choy","Collard Greens","Endive"],
+  "Dairy": ["Butter","Cheese","Cream","Milk","Yogurt","Sour Cream","Cottage Cheese"],
+  "Meat": ["Bacon","Beef","Chicken","Duck","Lamb","Pork","Sausage","Turkey","Ham","Veal"],
+  "Bakery": ["Bagel","Bread","Brioche","Croissant","Donut","Muffin","Sourdough","Rolls","Baguette","Cake","Pie"],
+  "Beverages": ["Coffee","Juice","Soda","Tea","Water","Wine","Beer","Milkshake","Smoothie","Lemonade"]
+};
 
-    const shownCategories = {};
+const shownCategories = {};
 
-    function capitalizeFirst(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+function capitalizeFirst(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+}
+
+function getCategory(item) {
+  const lower = item.toLowerCase();
+  for (const [category, items] of Object.entries(sampleItems)) {
+    if (items.map(i => i.toLowerCase()).includes(lower)) return category;
+  }
+  return "Other";
+}
+
+function createCategoryCell(category) {
+  if (!shownCategories[category]) {
+    if (category === "Other") {
+      const rows = categoriesTable.querySelectorAll("tr");
+      categoriesTableRow = rows[rows.length-1] || categoriesTableRow;
+    } else if (categoriesTableRow.children.length >= 4) {
+      const newRow = document.createElement("tr");
+      categoriesTable.appendChild(newRow);
+      categoriesTableRow = newRow;
     }
 
-    function getCategory(item) {
-      const lower = item.toLowerCase();
-      for (const [category, items] of Object.entries(sampleItems)) {
-        if (items.map(i => i.toLowerCase()).includes(lower)) return category;
-      }
-      return "Other";
+    const td = document.createElement("td");
+    td.className = "category";
+    td.id = "cat-" + category;
+
+    const title = document.createElement("h3");
+    title.textContent = category;
+
+    const ul = document.createElement("ul");
+
+    td.appendChild(title);
+    td.appendChild(ul);
+
+    if (category === "Other") {
+      categoriesTable.appendChild(td);
+    } else {
+      categoriesTableRow.appendChild(td);
     }
 
-    function createCategoryCell(category) {
-      if (!shownCategories[category]) {
-        if (category === "Other") {
-          const rows = categoriesTable.querySelectorAll("tr");
-          categoriesTableRow = rows[rows.length-1] || categoriesTableRow;
-        } else if (categoriesTableRow.children.length >= 4) {
-          const newRow = document.createElement("tr");
-          categoriesTable.appendChild(newRow);
-          categoriesTableRow = newRow;
-        }
+    shownCategories[category] = ul;
+  }
+}
 
-        const td = document.createElement("td");
-        td.className = "category";
-        td.id = "cat-" + category;
+function updateStats() {
+  totalItemsElem.textContent = totalItems;
+  totalItems2Elem.textContent = totalItems;
+  pickedItemsElem.textContent = pickedItems;
+  let percent = totalItems === 0 ? 0 : Math.round((pickedItems/totalItems)*100);
+  completionElem.textContent = percent + "%";
+}
 
-        const title = document.createElement("h3");
-        title.textContent = category;
+function addItem() {
+  let value = input.value.trim();
+  if (!value) return;
 
-        const ul = document.createElement("ul");
+  value = capitalizeFirst(value);
+  const category = getCategory(value);
 
-        td.appendChild(title);
-        td.appendChild(ul);
+  createCategoryCell(category);
+  const ul = shownCategories[category];
 
-        if (category === "Other") {
-          categoriesTable.appendChild(td);
-        } else {
-          categoriesTableRow.appendChild(td);
-        }
+  const li = document.createElement("li");
 
-        shownCategories[category] = ul;
-      }
+  const checkMark = document.createElement("span");
+  checkMark.className = "checkedMark";
+  checkMark.textContent = "✔";
+  li.appendChild(checkMark);
+
+  const textNode = document.createTextNode(value);
+  li.appendChild(textNode);
+
+  li.addEventListener("click", function(e) {
+    if (e.target.tagName !== "BUTTON") {
+      li.classList.toggle("checked");
+      pickedItems += li.classList.contains("checked") ? 1 : -1;
+      updateStats();
     }
+  });
 
-    function updateStats() {
-      totalItemsElem.textContent = totalItems;
-      totalItems2Elem.textContent = totalItems;
-      pickedItemsElem.textContent = pickedItems;
-      let percent = totalItems === 0 ? 0 : Math.round((pickedItems/totalItems)*100);
-      completionElem.textContent = percent + "%";
+  const delBtn = document.createElement("button");
+  delBtn.textContent = "x";
+  delBtn.className = "deleteBtn";
+  delBtn.onclick = function() {
+    if (li.classList.contains("checked")) pickedItems--;
+    li.remove();
+    totalItems--;
+    updateStats();
+    if (ul.children.length === 0) {
+      document.getElementById("cat-" + category).remove();
+      delete shownCategories[category];
     }
+  };
 
-    function addItem() {
-      let value = input.value.trim();
-      if (!value) return;
+  li.appendChild(delBtn);
+  ul.appendChild(li);
 
-      value = capitalizeFirst(value);
-      const category = getCategory(value);
+  const sortedLis = Array.from(ul.children).sort((a,b) => a.textContent.localeCompare(b.textContent));
+  ul.innerHTML = "";
+  sortedLis.forEach(l => ul.appendChild(l));
 
-      createCategoryCell(category);
-      const ul = shownCategories[category];
+  totalItems++;
+  updateStats();
+  input.value = "";
+}
 
-      const li = document.createElement("li");
+addBtn.addEventListener("click", addItem);
+input.addEventListener("keypress", function(e) {
+  if (e.key === "Enter") addItem();
+});
 
-      const checkMark = document.createEl
+// Microphone for iPhone Safari and other browsers
+micBtn.addEventListener("click", () => {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SpeechRecognition) {
+    alert('Speech recognition not supported in this browser.');
+    return;
+  }
+  const recognition = new SpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
+
+  recognition.start();
+
+  recognition.onresult = function(event) {
+    const speechResult = event.results[0][0].transcript;
+    input.value = speechResult;
+    addItem();
+  };
+
+  recognition.onerror = function(event) {
+    console.error(event.error);
+  };
+});
+</script>
+</body>
+</html>
