@@ -2,126 +2,126 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Grocery List V11</title>
+<title>Grocery List V12</title>
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    padding: 40px;
-  }
-  .container {
-    background: #fff;
-    padding: 25px;
-    border-radius: 12px;
-    width: 95%;
-    max-width: 1200px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    position: relative;
-  }
-  h1 {
-    text-align: center;
-    font-size: 36px;
-    margin-bottom: 25px;
-  }
-  .input-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 15px;
-    gap: 10px;
-  }
-  #itemInput {
-    width: 60%;
-    padding: 18px;
-    font-size: 20px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    text-align: center;
-  }
-  #addBtn {
-    padding: 16px 22px;
-    background: #28a745;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 18px;
-  }
-  #addBtn:hover { background: #218838; }
-  #micBtn {
-    background: #007bff;
-    border: none;
-    font-size: 20px;
-    padding: 16px 20px;
-    cursor: pointer;
-    border-radius: 6px;
-    color: white;
-  }
-  #micBtn:hover { background: #0062cc; }
-  .stats {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    text-align: right;
-    font-size: 14px;
-    color: #333;
-    line-height: 1.4;
-  }
-  table { width: 100%; border-collapse: collapse; margin-top: 25px; }
-  td {
-    vertical-align: top;
-    width: 25%;
-    padding: 10px;
-  }
-  .category h3 {
-    margin-bottom: 10px;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 4px;
-    font-size: 1.1em;
-    color: #333;
-    text-align: center;
-  }
-  ul { list-style-type: none; padding: 0; margin: 0; }
-  li {
-    background: #fafafa;
-    padding: 6px 8px;
-    margin: 4px 0;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  .checkedMark { color: green; font-weight: bold; margin-right: 4px; display: none; }
-  li.checked .checkedMark { display: inline; }
-  .deleteBtn {
-    font-size: 14px;
-    color: red;
-    border: none;
-    background: none;
-    cursor: pointer;
-    margin-left: 4px;
-  }
-  .deleteBtn:hover { color: darkred; }
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  padding: 40px;
+}
+.container {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 95%;
+  max-width: 1200px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  position: relative;
+}
+h1 {
+  text-align: center;
+  font-size: 36px;
+  margin-bottom: 25px;
+}
+.input-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+#itemInput {
+  width: 60%;
+  padding: 18px;
+  font-size: 20px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  text-align: center;
+}
+#addBtn {
+  padding: 16px 22px;
+  background: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 18px;
+}
+#addBtn:hover { background: #218838; }
+#micBtn {
+  background: #007bff;
+  border: none;
+  font-size: 20px;
+  padding: 16px 20px;
+  cursor: pointer;
+  border-radius: 6px;
+  color: white;
+}
+#micBtn:hover { background: #0062cc; }
+.stats {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  text-align: right;
+  font-size: 14px;
+  color: #333;
+  line-height: 1.4;
+}
+table { width: 100%; border-collapse: collapse; margin-top: 25px; }
+td {
+  vertical-align: top;
+  width: 25%;
+  padding: 10px;
+}
+.category h3 {
+  margin-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 4px;
+  font-size: 1.1em;
+  color: #333;
+  text-align: center;
+}
+ul { list-style-type: none; padding: 0; margin: 0; }
+li {
+  background: #fafafa;
+  padding: 6px 8px;
+  margin: 4px 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+}
+.checkedMark { color: green; font-weight: bold; margin-right: 4px; display: none; }
+li.checked .checkedMark { display: inline; }
+.deleteBtn {
+  font-size: 14px;
+  color: red;
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin-left: 4px;
+}
+.deleteBtn:hover { color: darkred; }
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Grocery List V11</h1>
-  <div class="input-container">
-    <input type="text" id="itemInput" placeholder="Add grocery item...">
-    <button id="addBtn">Add</button>
-    <button id="micBtn">🎤</button>
-  </div>
-  <div class="stats">
-    <div>Total Items: <span id="totalItems">0</span></div>
-    <div>Picked: <span id="pickedItems">0</span> / <span id="totalItems2">0</span></div>
-    <div><span id="completionPercent">0%</span></div>
-  </div>
-  <table id="categoriesTable"><tr></tr></table>
+<h1>Grocery List V12</h1>
+<div class="input-container">
+  <input type="text" id="itemInput" placeholder="Add grocery item...">
+  <button id="addBtn">Add</button>
+  <button id="micBtn">🎤</button>
+</div>
+<div class="stats">
+  <div>Total Items: <span id="totalItems">0</span></div>
+  <div>Picked: <span id="pickedItems">0</span> / <span id="totalItems2">0</span></div>
+  <div><span id="completionPercent">0%</span></div>
+</div>
+<table id="categoriesTable"><tr></tr></table>
 </div>
 
 <script>
@@ -138,13 +138,14 @@ let categoriesTableRow = categoriesTable.querySelector("tr");
 let totalItems = 0;
 let pickedItems = 0;
 
+// Major categories and sample items
 const sampleItems = {
-  "Fruits": ["Apple","Apricot","Avocado","Banana","Blackberry","Blueberry","Cherry","Coconut","Cranberry","Date","Dragonfruit","Fig","Grape","Grapefruit","Kiwi","Lemon","Lime","Mango","Melon","Nectarine","Orange","Papaya","Peach","Pear","Pineapple","Plum","Pomegranate","Raspberry","Strawberry","Watermelon","Passionfruit","Starfruit","Tangerine","Guava","Lychee","Mulberry","Persimmon"],
-  "Vegetables": ["Artichoke","Asparagus","Beet","Bell Pepper","Broccoli","Brussels Sprouts","Cabbage","Carrot","Cauliflower","Celery","Corn","Cucumber","Eggplant","Garlic","Kale","Leek","Lettuce","Mushroom","Onion","Parsnip","Pea","Potato","Pumpkin","Radish","Spinach","Squash","Sweet Potato","Tomato","Turnip","Zucchini","Okra","Rutabaga","Chayote","Fennel","Bok Choy","Collard Greens","Endive"],
-  "Dairy": ["Butter","Cheese","Cream","Milk","Yogurt","Sour Cream","Cottage Cheese"],
-  "Meat": ["Bacon","Beef","Chicken","Duck","Lamb","Pork","Sausage","Turkey","Ham","Veal"],
-  "Bakery": ["Bagel","Bread","Brioche","Croissant","Donut","Muffin","Sourdough","Rolls","Baguette","Cake","Pie"],
-  "Beverages": ["Coffee","Juice","Soda","Tea","Water","Wine","Beer","Milkshake","Smoothie","Lemonade"]
+  "Fruits": ["Apple","Banana","Orange","Strawberry","Grapes","Mango","Pineapple","Watermelon"],
+  "Vegetables": ["Carrot","Potato","Tomato","Lettuce","Spinach","Cucumber","Broccoli"],
+  "Dairy": ["Milk","Cheese","Butter","Yogurt"],
+  "Meat": ["Chicken","Beef","Pork","Bacon","Turkey"],
+  "Bakery": ["Bread","Bagel","Croissant","Cake","Muffin"],
+  "Beverages": ["Water","Juice","Soda","Tea","Coffee"],
 };
 
 const shownCategories = {};
@@ -156,7 +157,7 @@ function capitalizeFirst(str) {
 function getCategory(item) {
   const lower = item.toLowerCase();
   for (const [category, items] of Object.entries(sampleItems)) {
-    if (items.map(i => i.toLowerCase()).includes(lower)) return category;
+    if (items.some(i => i.toLowerCase() === lower)) return category;
   }
   return "Other";
 }
@@ -174,13 +175,11 @@ function createCategoryCell(category) {
     td.appendChild(title);
     td.appendChild(ul);
 
-    // Add td to row or create new row if >4 columns
     if (!categoriesTableRow || categoriesTableRow.children.length >= 4) {
       categoriesTableRow = document.createElement("tr");
       categoriesTable.appendChild(categoriesTableRow);
     }
     categoriesTableRow.appendChild(td);
-
     shownCategories[category] = ul;
   }
 }
@@ -203,14 +202,12 @@ function addItem() {
   const ul = shownCategories[category];
 
   const li = document.createElement("li");
-
   const checkMark = document.createElement("span");
   checkMark.className = "checkedMark";
   checkMark.textContent = "✔";
   li.appendChild(checkMark);
 
-  const textNode = document.createTextNode(value);
-  li.appendChild(textNode);
+  li.appendChild(document.createTextNode(value));
 
   li.addEventListener("click", function(e) {
     if (e.target.tagName !== "BUTTON") {
@@ -237,7 +234,7 @@ function addItem() {
   li.appendChild(delBtn);
   ul.appendChild(li);
 
-  // Sort items alphabetically
+  // Sort alphabetically
   const sortedLis = Array.from(ul.children).sort((a,b) => a.textContent.localeCompare(b.textContent));
   ul.innerHTML = "";
   sortedLis.forEach(l => ul.appendChild(l));
@@ -248,7 +245,7 @@ function addItem() {
 }
 
 addBtn.addEventListener("click", addItem);
-input.addEventListener("keypress", function(e) { if(e.key==="Enter") addItem(); });
+input.addEventListener("keypress", function(e){ if(e.key==="Enter") addItem(); });
 
 // Microphone support
 micBtn.addEventListener("click", () => {
@@ -260,11 +257,10 @@ micBtn.addEventListener("click", () => {
   recognition.maxAlternatives = 1;
   recognition.start();
   recognition.onresult = function(event) {
-    const speechResult = event.results[0][0].transcript;
-    input.value = speechResult;
+    input.value = event.results[0][0].transcript;
     addItem();
   };
-  recognition.onerror = function(event) { console.error(event.error); };
+  recognition.onerror = function(event){ console.error(event.error); };
 });
 </script>
 </body>
