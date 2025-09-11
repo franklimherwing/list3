@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Grocery List V23</title>
+  <title>Grocery List V24</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * { box-sizing: border-box; }
@@ -124,7 +124,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Grocery List V23</h1>
+    <h1>Grocery List V24</h1>
     <div class="input-container">
       <input type="text" id="itemInput" placeholder="Add grocery item(s), separate multiple items with commas...">
       <button id="addBtn">Add</button>
@@ -207,7 +207,7 @@
     function addItem() {
       const rawValue = input.value.trim();
       if (!rawValue) return;
-      const items = rawValue.split(",").map(s => s.trim()).filter(s => s);
+      const items = rawValue.split(/\s+/).map(s => s.trim()).filter(s => s);
       for (const val of items) {
         const value = capitalizeFirst(val);
         const category = getCategory(value);
