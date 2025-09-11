@@ -2,12 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Grocery List V15</title>
+  <title>Grocery List V18</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
@@ -26,7 +24,7 @@
     }
     h1 {
       text-align: center;
-      font-size: 2.2em;
+      font-size: 2.5em;
       margin-bottom: 20px;
     }
     .input-container {
@@ -39,24 +37,22 @@
     #itemInput {
       flex: 1;
       min-width: 200px;
-      padding: 14px;
-      font-size: 18px;
+      padding: 18px;
+      font-size: 20px;
       border: 1px solid #ddd;
       border-radius: 6px;
       text-align: center;
     }
-    #addBtn, #micBtn {
-      padding: 14px 20px;
-      font-size: 16px;
+    #addBtn {
+      padding: 18px 24px;
+      font-size: 18px;
       border: none;
       border-radius: 6px;
       cursor: pointer;
+      background: #28a745;
       color: white;
     }
-    #addBtn { background: #28a745; }
     #addBtn:hover { background: #218838; }
-    #micBtn { background: #007bff; }
-    #micBtn:hover { background: #0062cc; }
     .stats {
       text-align: right;
       font-size: 14px;
@@ -66,6 +62,8 @@
       width: 100%;
       border-collapse: separate;
       border-spacing: 20px;
+      table-layout: fixed;
+      word-wrap: break-word;
     }
     td {
       vertical-align: top;
@@ -101,14 +99,11 @@
       margin-right: 6px;
       display: none;
     }
-    li.checked .checkedMark {
-      display: inline;
-    }
+    li.checked .checkedMark { display: inline; }
     li.checked {
       text-decoration: line-through;
       text-decoration-color: red;
       color: #888;
-      /* do not center anything extra, left‑aligned by default */
     }
     .deleteBtn {
       font-size: 14px;
@@ -117,31 +112,17 @@
       background: none;
       cursor: pointer;
     }
-    .deleteBtn:hover {
-      color: darkred;
-    }
-    @media (max-width: 768px) {
-      td {
-        width: 50%;
-      }
-    }
-    @media (max-width: 480px) {
-      td {
-        width: 100%;
-      }
-      .stats {
-        text-align: center;
-      }
-    }
+    .deleteBtn:hover { color: darkred; }
+    @media (max-width: 768px) { td { width: 50%; } }
+    @media (max-width: 480px) { td { width: 100%; } .stats { text-align: center; } }
   </style>
 </head>
 <body>
   <div class="container">
-    <h1>Grocery List V17</h1>
+    <h1>Grocery List V18</h1>
     <div class="input-container">
-      <input type="text" id="itemInput" placeholder="Add grocery item...">
+      <input type="text" id="itemInput" placeholder="Add grocery item(s), separate multiple items with commas...">
       <button id="addBtn">Add</button>
-      <button id="micBtn">🎤</button>
     </div>
     <div class="stats">
       <div>Total Items: <span id="totalItems">0</span></div>
@@ -166,12 +147,10 @@
 
     const input = document.getElementById("itemInput");
     const addBtn = document.getElementById("addBtn");
-    const micBtn = document.getElementById("micBtn");
     const totalItemsElem = document.getElementById("totalItems");
     const totalItems2Elem = document.getElementById("totalItems2");
     const pickedItemsElem = document.getElementById("pickedItems");
     const completionElem = document.getElementById("completionPercent");
-
     const categoriesTable = document.getElementById("categoriesTable");
     let categoriesTableRow = categoriesTable.querySelector("tr");
     let totalItems = 0;
@@ -186,9 +165,7 @@
     function getCategory(item) {
       const lower = item.toLowerCase();
       for (const [category, items] of Object.entries(sampleItems)) {
-        if (items.some(i => i.toLowerCase() === lower)) {
-          return category;
-        }
+        if (items.some(i => i.toLowerCase() === lower)) return category;
       }
       return "Other";
     }
@@ -198,13 +175,11 @@
         const td = document.createElement("td");
         td.className = "category";
         td.id = "cat-" + category;
-
         const title = document.createElement("h3");
         title.textContent = category;
         const ul = document.createElement("ul");
         td.appendChild(title);
         td.appendChild(ul);
-
         if (!categoriesTableRow || categoriesTableRow.children.length >= 4) {
           categoriesTableRow = document.createElement("tr");
           categoriesTable.appendChild(categoriesTableRow);
@@ -218,113 +193,77 @@
       totalItemsElem.textContent = totalItems;
       totalItems2Elem.textContent = totalItems;
       pickedItemsElem.textContent = pickedItems;
-      let percent = totalItems === 0 ? 0 : Math.round((pickedItems / totalItems) * 100);
+      const percent = totalItems === 0 ? 0 : Math.round((pickedItems / totalItems) * 100);
       completionElem.textContent = percent + "%";
     }
 
     function addItem() {
-      const valueRaw = input.value.trim();
-      if (!valueRaw) {
-        // If it's empty, do nothing
-        return;
-      }
-      const value = capitalizeFirst(valueRaw);
-      const category = getCategory(value);
+      const rawValue = input.value.trim();
+      if (!rawValue) return;
+      const items = rawValue.split(",").map(s => s.trim()).filter(s => s);
+      for (const val of items) {
+        const value = capitalizeFirst(val);
+        const category = getCategory(value);
+        createCategoryCell(category);
+        const ul = shownCategories[category];
 
-      createCategoryCell(category);
-      const ul = shownCategories[category];
+        const li = document.createElement("li");
+        const checkMark = document.createElement("span");
+        checkMark.className = "checkedMark";
+        checkMark.textContent = "✔";
+        li.appendChild(checkMark);
+        li.appendChild(document.createTextNode(value));
 
-      const li = document.createElement("li");
-
-      const checkMark = document.createElement("span");
-      checkMark.className = "checkedMark";
-      checkMark.textContent = "✔";
-      li.appendChild(checkMark);
-
-      // text node for the item name
-      const textNode = document.createTextNode(value);
-      li.appendChild(textNode);
-
-      li.addEventListener("click", function(e) {
-        if (e.target.tagName !== "BUTTON") {
-          li.classList.toggle("checked");
-          if (li.classList.contains("checked")) {
-            pickedItems++;
-          } else {
-            pickedItems--;
+        li.addEventListener("click", function(e) {
+          if (e.target.tagName !== "BUTTON") {
+            li.classList.toggle("checked");
+            if (li.classList.contains("checked")) pickedItems++;
+            else pickedItems--;
+            updateStats();
           }
-          updateStats();
-        }
-      });
-
-      const delBtn = document.createElement("button");
-      delBtn.textContent = "x";
-      delBtn.className = "deleteBtn";
-      delBtn.addEventListener("click", function(e) {
-        e.stopPropagation();  // prevent triggering the li click
-        if (li.classList.contains("checked")) {
-          pickedItems--;
-        }
-        li.remove();
-        totalItems--;
-        updateStats();
-        // if no more items in the category, remove the category column
-        if (ul.children.length === 0) {
-          const td = document.getElementById("cat-" + category);
-          if (td) {
-            td.remove();
-          }
-          delete shownCategories[category];
-        }
-      });
-
-      li.appendChild(delBtn);
-      ul.appendChild(li);
-
-      // sort the list items
-      const sortedLis = Array.from(ul.children)
-        .sort((a,b) => {
-          // compare only the text, exclude delete button and checkMark
-          return a.textContent.localeCompare(b.textContent);
         });
-      // clear and re-append
-      ul.innerHTML = "";
-      sortedLis.forEach(l => ul.appendChild(l));
 
-      totalItems++;
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "x";
+        delBtn.className = "deleteBtn";
+        delBtn.addEventListener("click", function(e) {
+          e.stopPropagation();
+          if (li.classList.contains("checked")) pickedItems--;
+          li.remove();
+          totalItems--;
+          updateStats();
+          if (ul.children.length === 0) {
+            const td = document.getElementById("cat-" + category);
+            if (td) td.remove();
+            delete shownCategories[category];
+          }
+        });
+        li.appendChild(delBtn);
+        ul.appendChild(li);
+
+        // Sort items
+        const sortedLis = Array.from(ul.children).sort((a,b) => a.textContent.localeCompare(b.textContent));
+        ul.innerHTML = "";
+        sortedLis.forEach(l => ul.appendChild(l));
+        totalItems++;
+      }
       updateStats();
-
       input.value = "";
       input.focus();
     }
 
     addBtn.addEventListener("click", addItem);
     input.addEventListener("keypress", function(e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        addItem();
-      }
+      if (e.key === "Enter") { e.preventDefault(); addItem(); }
     });
 
-    micBtn.addEventListener("click", () => {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        alert('Speech recognition not supported.');
-        return;
-      }
-      const recognition = new SpeechRecognition();
-      recognition.lang = 'en-US';
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-      recognition.start();
-      recognition.onresult = function(event) {
-        input.value = event.results[0][0].transcript;
+    // Preload all sample items
+    for (const cat of Object.keys(sampleItems)) {
+      for (const item of sampleItems[cat]) {
+        input.value = item;
         addItem();
-      };
-      recognition.onerror = function(event) {
-        console.error(event.error);
-      };
-    });
+      }
+    }
   </script>
 </body>
 </html>
