@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Grocery List V22</title>
+  <title>Grocery List V23</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * { box-sizing: border-box; }
@@ -66,13 +66,12 @@
     table {
       width: 100%;
       border-collapse: separate;
-      border-spacing: 20px;
-      table-layout: fixed;
-      word-wrap: break-word;
+      border-spacing: 30px; /* wider spacing between categories */
     }
-    td {
+    td.category {
       vertical-align: top;
-      width: 33.33%;
+      width: 33%; /* 3-column layout */
+      padding: 10px; /* space inside each category cell */
     }
     .category h3 {
       text-align: center;
@@ -124,7 +123,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Grocery List V22</h1>
+    <h1>Grocery List V23</h1>
     <div class="input-container">
       <input type="text" id="itemInput" placeholder="Add grocery item(s), separate multiple items with commas...">
       <button id="addBtn">Add</button>
