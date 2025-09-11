@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Grocery List V16</title>
+  <title>Grocery List V15</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * {
       box-sizing: border-box;
     }
-
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
@@ -17,7 +16,6 @@
       display: flex;
       justify-content: center;
     }
-
     .container {
       background: #fff;
       padding: 25px;
@@ -26,13 +24,11 @@
       max-width: 1400px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-
     h1 {
       text-align: center;
       font-size: 2.2em;
       margin-bottom: 20px;
     }
-
     .input-container {
       display: flex;
       flex-wrap: wrap;
@@ -40,7 +36,6 @@
       gap: 10px;
       margin-bottom: 15px;
     }
-
     #itemInput {
       flex: 1;
       min-width: 200px;
@@ -50,7 +45,6 @@
       border-radius: 6px;
       text-align: center;
     }
-
     #addBtn, #micBtn {
       padding: 14px 20px;
       font-size: 16px;
@@ -59,30 +53,24 @@
       cursor: pointer;
       color: white;
     }
-
     #addBtn { background: #28a745; }
     #addBtn:hover { background: #218838; }
-
     #micBtn { background: #007bff; }
     #micBtn:hover { background: #0062cc; }
-
     .stats {
       text-align: right;
       font-size: 14px;
       margin-bottom: 15px;
     }
-
     table {
       width: 100%;
       border-collapse: separate;
       border-spacing: 20px;
     }
-
     td {
       vertical-align: top;
       width: 25%;
     }
-
     .category h3 {
       text-align: center;
       margin-bottom: 10px;
@@ -90,13 +78,11 @@
       border-bottom: 1px solid #ccc;
       padding-bottom: 5px;
     }
-
     ul {
       list-style-type: none;
       padding: 0;
       margin: 0;
     }
-
     li {
       background: #fafafa;
       padding: 6px 8px;
@@ -109,24 +95,21 @@
       font-weight: bold;
       cursor: pointer;
     }
-
     .checkedMark {
       color: green;
       font-weight: bold;
       margin-right: 6px;
       display: none;
     }
-
     li.checked .checkedMark {
       display: inline;
     }
-
     li.checked {
       text-decoration: line-through;
       text-decoration-color: red;
       color: #888;
+      /* do not center anything extra, left‑aligned by default */
     }
-
     .deleteBtn {
       font-size: 14px;
       color: red;
@@ -134,22 +117,18 @@
       background: none;
       cursor: pointer;
     }
-
     .deleteBtn:hover {
       color: darkred;
     }
-
     @media (max-width: 768px) {
       td {
         width: 50%;
       }
     }
-
     @media (max-width: 480px) {
       td {
         width: 100%;
       }
-
       .stats {
         text-align: center;
       }
@@ -157,157 +136,195 @@
   </style>
 </head>
 <body>
-<div class="container">
-  <h1>Grocery List V16</h1>
-  <div class="input-container">
-    <input type="text" id="itemInput" placeholder="Add grocery item...">
-    <button id="addBtn">Add</button>
-    <button id="micBtn">🎤</button>
+  <div class="container">
+    <h1>Grocery List V17</h1>
+    <div class="input-container">
+      <input type="text" id="itemInput" placeholder="Add grocery item...">
+      <button id="addBtn">Add</button>
+      <button id="micBtn">🎤</button>
+    </div>
+    <div class="stats">
+      <div>Total Items: <span id="totalItems">0</span></div>
+      <div>Picked: <span id="pickedItems">0</span> / <span id="totalItems2">0</span></div>
+      <div><span id="completionPercent">0%</span></div>
+    </div>
+    <table id="categoriesTable"><tr></tr></table>
   </div>
-  <div class="stats">
-    <div>Total Items: <span id="totalItems">0</span></div>
-    <div>Picked: <span id="pickedItems">0</span> / <span id="totalItems2">0</span></div>
-    <div><span id="completionPercent">0%</span></div>
-  </div>
-  <table id="categoriesTable"><tr></tr></table>
-</div>
 
-<script>
-const sampleItems = {
-  "Fruits & Vegetables": [...],
-  "Meat & Seafood": [...],
-  "Dairy & Eggs": [...],
-  "Bakery & Bread": [...],
-  "Pantry Staples": [...],
-  "Snacks & Sweets": [...],
-  "Beverages": [...],
-  "Frozen Foods": [...],
-  "Household & Other Essentials": [...]
-};
+  <script>
+    const sampleItems = {
+      "Fruits & Vegetables": ["Apples","Bananas","Oranges","Strawberries","Grapes","Lemons","Avocados","Blueberries","Peaches","Melons","Mangos","Pineapples","Tomatoes","Potatoes","Onions","Carrots","Lettuce","Spinach","Kale","Broccoli","Peppers","Cucumbers","Celery","Garlic","Mushrooms","Corn","Peas","Squash","Zucchini","Asparagus","Radishes","Beets","Cabbage","Ginger","Limes","Pears","Plums","Cherries","Raspberries","Blackberries","Cranberries","Papayas","Artichokes","Eggplant","Okra","Leeks","Turnips","Rutabagas","Parsnips","Cilantro"],
+      "Meat & Seafood": ["Chicken","Beef","Pork","Bacon","Sausage","Steak","Ribs","Ham","Turkey","Salmon","Tuna","Shrimp","Cod","Tilapia","Scallops","Crab","Lobster","Clams","Mussels","Oysters","Trout","Haddock","Catfish","Sardines","Anchovies","Pepperoni","Salami","Brisket","Chops","Wings","Ground","Liver","Hotdogs","Patties","Jerky","Duck","Lamb","Veal","Venison","Franks","Loin","Roast","Breast","Thighs","Drumsticks","Fillet","Calamari","Pollock","Halibut"],
+      "Dairy & Eggs": ["Milk","Eggs","Butter","Cheese","Yogurt","Cream","Sourcream","Cottage","Ricotta","Mozzarella","Cheddar","Parmesan","Provolone","Gouda","Brie","Feta","Swiss","Buttermilk","Half-and-half","Whipping","Margarine","Kefir","Skim","Whole","Almond","Soy","Oat","Lactose-free","Goat","String","Spread","Curds","Whey","Gelato","Custard","Pudding","Flan","Eggwhites","Yolks","Hardboiled","Pasteurized","Homogenized","Organic","Light","Nonfat","Shredded","Sliced","Block","Cubes","Spread"],
+      "Bakery & Bread": ["Bread","Baguette","Rolls","Buns","Bagels","Croissants","Muffins","Donuts","Cake","Pie","Cookies","Brownies","Scones","Biscuits","Pita","Tortillas","Wraps","Loaf","Rye","Sourdough","Wheat","White","Multigrain","Pumpernickel","Challah","Focaccia","Ciabatta","Pastries","Tarts","Eclairs","Cannoli","Cupcakes","Danishes","Pretzels","Crackers","Croutons","Stuffing","Crust","Gluten-free","Artisan","Flatbread","Naan","Matzo","Cornbread","Shortbread","Macarons","Madeleines","Poundcake","Cheesecake","Cobblers"],
+      "Pantry Staples": ["Pasta","Rice","Beans","Lentils","Flour","Sugar","Salt","Pepper","Oil","Vinegar","Spices","Herbs","Honey","Syrup","Oats","Cereal","Soup","Broth","Stock","Tomatoes (canned)","Tuna (canned)","Sauce","Ketchup","Mustard","Mayo","Soy-Sauce","Olive-Oil","Baking-Powder","Baking-Soda","Yeast","Cornstarch","Peanut-Butter","Jelly","Jam","Preserves","Crackers","Breadcrumbs","Granola","Popcorn","Nuts","Seeds","Raisins","Dates","Coconut (shredded)","Evaporated-Milk","Powdered-Milk","Shortening","Pancake-Mix","Stuffing-Mix","Gravy"],
+      "Snacks & Sweets": ["Chips","Pretzels","Popcorn","Crackers","Cookies","Candy","Chocolate","Gum","Mints","Nuts","Trail-Mix","Bars","Fruit-Snacks","Jerky","Pudding","Applesauce","Cupcakes","Brownies","Pastries","Donuts","Cake","Pie","Ice-Cream","Popsicles","Sorbet","Gelato","Marshmallows","Gummies","Lollipops","Caramels","Licorice","Taffy","Brittle","Fudge","Toffee","Wafers","Biscotti","Granola-Bars","Protein-Bars","Rice-Cakes","Pork-Rinds","Peanuts","Cashews","Almonds","Pistachios","Sunflower-Seeds","Pumpkin-Seeds","Corn-Nuts","Cheese-Puffs","Pirate's-Booty"],
+      "Beverages": ["Water","Soda","Juice","Coffee","Tea","Lemonade","Sports-Drink","Energy-Drink","Milk","Almond-Milk","Soy-Milk","Oat-Milk","Coconut-Water","Sparkling-Water","Seltzer","Soda-Water","Tonic","Kombucha","Smoothies","Shakes","Frappuccino","Espresso","Latte","Cappuccino","Macchiato","Americano","Cold-Brew","Hot-Chocolate","Eggnog","Punch","Kefir","Yerba-Mate","Green-Tea","Black-Tea","Herbal-Tea","Iced-Tea","Apple-Juice","Orange-Juice"],
+      "Frozen Foods": ["Pizza","Vegetables","Fruits","Berries","Waffles","Pancakes","French-Toast","Bagels","Meals","Entrees","Lasagna","Burritos","Nuggets","Patties","Fish-Sticks","Fries","Tater-Tots","Onion-Rings","Potpies","Dumplings","Gyozas","Spring-Rolls","Meatballs","Burgers","Hotdogs","Sausages","Bacon","Shrimp","Scallops","Lobster-Tails","Ice-Cream","Yogurt","Sorbet","Sherbet","Pies","Cakes","Cheesecake","Cookies","Brownies","Dough","Pastry","Phyllo","Juice","Concentrate","Smoothies","Potatoes","Rice","Quinoa","Edamame","Udon"],
+      "Household & Other Essentials": ["Soap","Shampoo","Conditioner","Toothpaste","Toothbrushes","Floss","Deodorant","Lotion","Sunscreen","Lip-Balm","Vitamins","Supplements","Pain-Relievers","Band-Aids","Sanitizer","Wipes","Tissues","Toilet-Paper","Paper-Towels","Napkins","Detergent","Softener","Pods","Dish-Soap","Sponges","Trash-Bags","Ziploc-Bags","Foil","Wrap","Parchment","Matches","Lighters","Batteries","Lightbulbs","Cleaners","Spray","Wipes (cleaning)","Sponges","Mop","Broom","Diapers","Wipes (baby)","Formula","Baby-Food","Pet-Food","Litter","Treats","Seeds (bird)","Charcoal","Fire-Logs"]
+    };
 
-const input = document.getElementById("itemInput");
-const addBtn = document.getElementById("addBtn");
-const micBtn = document.getElementById("micBtn");
-const totalItemsElem = document.getElementById("totalItems");
-const totalItems2Elem = document.getElementById("totalItems2");
-const pickedItemsElem = document.getElementById("pickedItems");
-const completionElem = document.getElementById("completionPercent");
+    const input = document.getElementById("itemInput");
+    const addBtn = document.getElementById("addBtn");
+    const micBtn = document.getElementById("micBtn");
+    const totalItemsElem = document.getElementById("totalItems");
+    const totalItems2Elem = document.getElementById("totalItems2");
+    const pickedItemsElem = document.getElementById("pickedItems");
+    const completionElem = document.getElementById("completionPercent");
 
-let categoriesTable = document.getElementById("categoriesTable");
-let categoriesTableRow = categoriesTable.querySelector("tr");
-let totalItems = 0;
-let pickedItems = 0;
-const shownCategories = {};
+    const categoriesTable = document.getElementById("categoriesTable");
+    let categoriesTableRow = categoriesTable.querySelector("tr");
+    let totalItems = 0;
+    let pickedItems = 0;
+    const shownCategories = {};
 
-function capitalizeFirst(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-}
-
-function getCategory(item) {
-  const lower = item.toLowerCase();
-  for (const [category, items] of Object.entries(sampleItems)) {
-    if (items.some(i => i.toLowerCase() === lower)) return category;
-  }
-  return "Other";
-}
-
-function createCategoryCell(category) {
-  if (!shownCategories[category]) {
-    const td = document.createElement("td");
-    td.className = "category";
-    td.id = "cat-" + category;
-
-    const title = document.createElement("h3");
-    title.textContent = category;
-
-    const ul = document.createElement("ul");
-    td.appendChild(title);
-    td.appendChild(ul);
-
-    if (!categoriesTableRow || categoriesTableRow.children.length >= 4) {
-      categoriesTableRow = document.createElement("tr");
-      categoriesTable.appendChild(categoriesTableRow);
+    function capitalizeFirst(str) {
+      if (!str) return str;
+      return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
     }
-    categoriesTableRow.appendChild(td);
-    shownCategories[category] = ul;
-  }
-}
 
-function updateStats() {
-  totalItemsElem.textContent = totalItems;
-  totalItems2Elem.textContent = totalItems;
-  pickedItemsElem.textContent = pickedItems;
-  let percent = totalItems === 0 ? 0 : Math.round((pickedItems/totalItems)*100);
-  completionElem.textContent = percent + "%";
-}
+    function getCategory(item) {
+      const lower = item.toLowerCase();
+      for (const [category, items] of Object.entries(sampleItems)) {
+        if (items.some(i => i.toLowerCase() === lower)) {
+          return category;
+        }
+      }
+      return "Other";
+    }
 
-function addItem() {
-  let value = input.value.trim();
-  if (!value) return;
-  value = capitalizeFirst(value);
-  const category = getCategory(value);
+    function createCategoryCell(category) {
+      if (!shownCategories[category]) {
+        const td = document.createElement("td");
+        td.className = "category";
+        td.id = "cat-" + category;
 
-  createCategoryCell(category);
-  const ul = shownCategories[category];
+        const title = document.createElement("h3");
+        title.textContent = category;
+        const ul = document.createElement("ul");
+        td.appendChild(title);
+        td.appendChild(ul);
 
-  const li = document.createElement("li");
-  const checkMark = document.createElement("span");
-  checkMark.className = "checkedMark";
-  checkMark.textContent = "✔";
-  li.appendChild(checkMark);
-  li.appendChild(document.createTextNode(value));
+        if (!categoriesTableRow || categoriesTableRow.children.length >= 4) {
+          categoriesTableRow = document.createElement("tr");
+          categoriesTable.appendChild(categoriesTableRow);
+        }
+        categoriesTableRow.appendChild(td);
+        shownCategories[category] = ul;
+      }
+    }
 
-  li.addEventListener("click", function(e) {
-    if (e.target.tagName !== "BUTTON") {
-      li.classList.toggle("checked");
-      pickedItems += li.classList.contains("checked") ? 1 : -1;
+    function updateStats() {
+      totalItemsElem.textContent = totalItems;
+      totalItems2Elem.textContent = totalItems;
+      pickedItemsElem.textContent = pickedItems;
+      let percent = totalItems === 0 ? 0 : Math.round((pickedItems / totalItems) * 100);
+      completionElem.textContent = percent + "%";
+    }
+
+    function addItem() {
+      const valueRaw = input.value.trim();
+      if (!valueRaw) {
+        // If it's empty, do nothing
+        return;
+      }
+      const value = capitalizeFirst(valueRaw);
+      const category = getCategory(value);
+
+      createCategoryCell(category);
+      const ul = shownCategories[category];
+
+      const li = document.createElement("li");
+
+      const checkMark = document.createElement("span");
+      checkMark.className = "checkedMark";
+      checkMark.textContent = "✔";
+      li.appendChild(checkMark);
+
+      // text node for the item name
+      const textNode = document.createTextNode(value);
+      li.appendChild(textNode);
+
+      li.addEventListener("click", function(e) {
+        if (e.target.tagName !== "BUTTON") {
+          li.classList.toggle("checked");
+          if (li.classList.contains("checked")) {
+            pickedItems++;
+          } else {
+            pickedItems--;
+          }
+          updateStats();
+        }
+      });
+
+      const delBtn = document.createElement("button");
+      delBtn.textContent = "x";
+      delBtn.className = "deleteBtn";
+      delBtn.addEventListener("click", function(e) {
+        e.stopPropagation();  // prevent triggering the li click
+        if (li.classList.contains("checked")) {
+          pickedItems--;
+        }
+        li.remove();
+        totalItems--;
+        updateStats();
+        // if no more items in the category, remove the category column
+        if (ul.children.length === 0) {
+          const td = document.getElementById("cat-" + category);
+          if (td) {
+            td.remove();
+          }
+          delete shownCategories[category];
+        }
+      });
+
+      li.appendChild(delBtn);
+      ul.appendChild(li);
+
+      // sort the list items
+      const sortedLis = Array.from(ul.children)
+        .sort((a,b) => {
+          // compare only the text, exclude delete button and checkMark
+          return a.textContent.localeCompare(b.textContent);
+        });
+      // clear and re-append
+      ul.innerHTML = "";
+      sortedLis.forEach(l => ul.appendChild(l));
+
+      totalItems++;
       updateStats();
+
+      input.value = "";
+      input.focus();
     }
-  });
 
-  const delBtn = document.createElement("button");
-  delBtn.textContent = "x";
-  delBtn.className = "deleteBtn";
-  delBtn.onclick = function() {
-    if (li.classList.contains("checked")) pickedItems--;
-    li.remove();
-    totalItems--;
-    updateStats();
-    if (ul.children.length === 0) {
-      document.getElementById("cat-" + category).remove();
-      delete shownCategories[category];
-    }
-  };
+    addBtn.addEventListener("click", addItem);
+    input.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        addItem();
+      }
+    });
 
-  li.appendChild(delBtn);
-  ul.appendChild(li);
-
-  const sortedLis = Array.from(ul.children).sort((a,b) => a.textContent.localeCompare(b.textContent));
-  ul.innerHTML = "";
-  sortedLis.forEach(l => ul.appendChild(l));
-
-  totalItems++;
-  updateStats();
-  input.value = "";
-}
-
-addBtn.addEventListener("click", addItem);
-input.addEventListener("keypress", function(e){ if(e.key==="Enter") addItem(); });
-
-micBtn.addEventListener("click", () => {
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) { alert('Speech recognition not supported.'); return; }
-  const recognition = new SpeechRecognition();
-  recognition.lang = 'en-US';
-  recognition.interimResults = false;
-  recognition.maxAlternatives = 1;
-  recognition.start();
-  recognition.onresult = function(event) {
-    input.value = event.results[0][0].transcript;
-    addItem();
-  };
-  recognition.onerror = function(event){ console.error(event.error); };
-});
-</script>
+    micBtn.addEventListener("click", () => {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SpeechRecognition) {
+        alert('Speech recognition not supported.');
+        return;
+      }
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      recognition.start();
+      recognition.onresult = function(event) {
+        input.value = event.results[0][0].transcript;
+        addItem();
+      };
+      recognition.onerror = function(event) {
+        console.error(event.error);
+      };
+    });
+  </script>
 </body>
 </html>
